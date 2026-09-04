@@ -2,6 +2,10 @@
 
 Kiren 的个人作品集网站，使用 Next.js、TypeScript、Tailwind CSS、Sanity 和 GSAP 构建。
 
+## 在线访问
+
+[personal-profile-sooty-six.vercel.app](https://personal-profile-sooty-six.vercel.app)
+
 ## 本地运行
 
 ```bash
