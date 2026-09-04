@@ -89,7 +89,6 @@ const FeaturedProjectArticle = memo(function FeaturedProjectArticle({
 
     return (
         <article
-            data-shoot-target="1"
             data-testid="featured-work-article"
             aria-labelledby={announcementId}
             className="flex h-full flex-col"
@@ -300,6 +299,7 @@ export default function Projects({ content }: ProjectsProps) {
     return (
         <section
             id="projects"
+            data-shoot-scroll-interactive="1"
             className="projects-section scroll-mt-24 bg-transparent text-foreground lg:-mt-[23vh]"
             aria-label="Projects"
         >
@@ -316,7 +316,7 @@ export default function Projects({ content }: ProjectsProps) {
 
                     <div className="mt-12 flex flex-col gap-8 sm:mt-14">
                         {content.items.map((project, index) => (
-                            <article key={project.id} data-shoot-target="1" className="border border-border bg-[#fafbf9] p-6 text-[#171512] dark:bg-[#171512] dark:text-[#f5f1e8] sm:p-8">
+                            <article key={project.id} className="border border-border bg-[#fafbf9] p-6 text-[#171512] dark:bg-[#171512] dark:text-[#f5f1e8] sm:p-8">
                                 <p className="font-mono text-[10px] tracking-[0.28em] opacity-55">{String(index + 1).padStart(2, "0")}</p>
                                 <h3 className="mt-3 text-3xl font-black uppercase leading-none tracking-tight">{project.title}</h3>
                                 <p className="mt-5 font-mono text-[10px] uppercase tracking-[0.16em] opacity-60">{project.type} · {project.role}</p>

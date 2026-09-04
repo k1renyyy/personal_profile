@@ -408,7 +408,6 @@ function DesktopExperienceCards({ experiences, title, label }: {experiences: Exp
           {experiences.map((experience, index) => (
             <li key={experience.id} data-testid="experience-card" data-card data-card-state="front" className="relative h-[clamp(540px,70vh,720px)] w-[clamp(310px,30vw,480px)] shrink-0 [transform-style:preserve-3d] will-change-transform">
               <div
-                data-shoot-target="1"
                 data-testid="experience-card-front"
                 aria-hidden="true"
                 className="absolute inset-0 overflow-hidden rounded-[2rem] border border-black/5 [backface-visibility:hidden]"
@@ -425,7 +424,7 @@ function DesktopExperienceCards({ experiences, title, label }: {experiences: Exp
                 style={{ borderColor: experience.color }}
               >
                     <div className="absolute inset-x-0 top-0 h-1.5" style={{ backgroundColor: experience.color }} aria-hidden="true" />
-                    <div data-card-back-content data-shoot-target="1" className="h-full">
+                    <div data-card-back-content>
                       <div className="flex items-start justify-between gap-5 border-b border-current/15 pb-[clamp(1rem,2vh,1.5rem)]">
                         <div>
                           <span className="font-mono text-xs tracking-[0.24em] opacity-45">{String(index + 1).padStart(2, "0")}</span>

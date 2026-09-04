@@ -189,34 +189,3 @@ test("touch shooting remains operational", async ({ browser, browserName }) => {
     await context.close();
   }
 });
-
-test("Shoot Mode hits portrait, experience and project content", async ({ page, browserName }) => {
-  test.skip(browserName !== "chromium", "Shoot hit testing is verified once in pinned Chromium.");
-  await page.setViewportSize({ width: 1440, height: 900 });
-  await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.goto("/", { waitUntil: "load" });
-  const shootToggle = page.getByRole("button", { name: "Toggle shoot mode" });
-  await shootToggle.click({ force: true });
-  await expect(shootToggle).toHaveAttribute("aria-pressed", "true");
-
-  const targets = [
-    {
-      target: page.locator("[data-photo='right'] img"),
-      hit: page.locator("[data-photo] [data-shot-down]"),
-    },
-    {
-      target: page.locator("[data-card-back-content][data-shoot-target]").nth(1),
-      hit: page.locator("[data-testid='experience-section'] [data-shot-down]"),
-    },
-    {
-      target: page.locator("[data-testid='featured-work-article'][data-shoot-target]"),
-      hit: page.locator("[data-testid='featured-work-article'][data-shot-down]"),
-    },
-  ];
-
-  for (const { target, hit } of targets) {
-    await target.scrollIntoViewIfNeeded();
-    await target.click();
-    await expect(hit).toHaveCount(1);
-  }
-});
