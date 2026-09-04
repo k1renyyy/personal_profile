@@ -16,9 +16,6 @@ const SPLAT_FADE_MS = 520;
 const SPLAT_TOTAL_LIFETIME_MS = 3200;
 const SPLAT_VISIBLE_MS = SPLAT_TOTAL_LIFETIME_MS - SPLAT_FADE_MS;
 
-/** Pinned scroll UIs (projects gallery): keep native clicks; shoot handlers must ignore this subtree. */
-const SHOOT_SCROLL_INTERACTIVE_SEL = "[data-shoot-scroll-interactive]";
-
 function GunLoadingFallback(): React.JSX.Element {
     return (
         <div className="h-64 w-[min(92vw,30rem)] sm:h-80 sm:w-xl md:h-96 md:w-176 overflow-visible flex items-end justify-center">
@@ -242,7 +239,10 @@ function pickHitWord(x: number, y: number, raw: Element | null): HTMLElement | n
     if (!raw) return null;
     if (raw.closest("[data-shoot-ui]")) return null;
 
-    const target = pickInnerShootTarget(raw) ?? pickSemanticTextTarget(raw);
+    const explicitTarget = pickInnerShootTarget(raw);
+    if (explicitTarget) return explicitTarget;
+
+    const target = pickSemanticTextTarget(raw);
     if (!target || target.closest("[data-shoot-ui]")) return null;
 
     if (target.tagName === "IMG") {
@@ -409,7 +409,6 @@ export default function FloatingShootToggle(): React.JSX.Element {
         const onSelectStart = (event: Event) => {
             const target = event.target as Element | null;
             if (target?.closest("[data-shoot-ui]")) return;
-            if (target?.closest(SHOOT_SCROLL_INTERACTIVE_SEL)) return;
             event.preventDefault();
         };
 
@@ -418,10 +417,6 @@ export default function FloatingShootToggle(): React.JSX.Element {
             if (raw?.closest("[data-shoot-ui]")) {
                 return;
             }
-            if (raw?.closest(SHOOT_SCROLL_INTERACTIVE_SEL)) {
-                return;
-            }
-
             playPaintballShotSound();
 
             const id = nextPaintSplatId();
@@ -509,7 +504,7 @@ export default function FloatingShootToggle(): React.JSX.Element {
                 .to(animTarget, {
                     y: window.innerHeight * 0.55,
                     rotation: fallTilt,
-                    opacity: 0.15,
+                    opacity: animTarget.dataset.shootDisappear === "1" ? 0 : 0.15,
                     scale: 1,
                     duration: 1.05,
                     ease: "power2.in",
@@ -528,7 +523,6 @@ export default function FloatingShootToggle(): React.JSX.Element {
             if (!event.isPrimary) return;
             if (event.pointerType === "mouse" && event.button !== 0) return;
             if ((event.target as Element | null)?.closest("[data-shoot-ui]")) return;
-            if ((event.target as Element | null)?.closest(SHOOT_SCROLL_INTERACTIVE_SEL)) return;
 
             // Keep touchscreen scrolling natural while allowing tap-to-shoot.
             // Do not update aim on touch down (avoids gun jumping when starting a scroll).
@@ -568,8 +562,7 @@ export default function FloatingShootToggle(): React.JSX.Element {
             if (event.pointerType === "touch") {
                 const upEl = document.elementFromPoint(event.clientX, event.clientY);
                 const inShootUi = upEl?.closest("[data-shoot-ui]");
-                const inScrollInteractive = upEl?.closest(SHOOT_SCROLL_INTERACTIVE_SEL);
-                if (!inShootUi && !inScrollInteractive && !touchMoved) {
+                if (!inShootUi && !touchMoved) {
                     updateAimFromPoint(event.clientX, event.clientY);
                     fireShot(event.clientX, event.clientY);
                 }
@@ -806,4 +799,3 @@ export default function FloatingShootToggle(): React.JSX.Element {
         </>
     );
 }
-

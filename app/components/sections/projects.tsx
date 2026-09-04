@@ -168,7 +168,6 @@ const FeaturedProjectArticle = memo(function FeaturedProjectArticle({
 type DesktopGalleryProps = {
     activeIndex: number;
     selectProject: (index: number) => void;
-    interactionsDisabled: boolean;
     projects: FeaturedProject[];
     title: string;
     label: string;
@@ -178,7 +177,6 @@ type DesktopGalleryProps = {
 const ProjectsDesktopGallery = memo(function ProjectsDesktopGallery({
     activeIndex,
     selectProject,
-    interactionsDisabled,
     projects,
     title,
     label,
@@ -218,7 +216,8 @@ const ProjectsDesktopGallery = memo(function ProjectsDesktopGallery({
                             <button
                                 key={item.id}
                                 type="button"
-                                disabled={interactionsDisabled}
+                                data-shoot-target="1"
+                                data-shoot-disappear="1"
                                 aria-pressed={isActive}
                                 onClick={() => selectProject(index)}
                                 className={`group flex min-h-16 items-center gap-4 px-4 py-3 text-left outline-none transition-[background-color,border-color] duration-200 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-foreground/60 dark:focus-visible:ring-[#e7dfd5] disabled:cursor-not-allowed disabled:opacity-60 motion-reduce:transition-none ${
@@ -249,6 +248,8 @@ const ProjectsDesktopGallery = memo(function ProjectsDesktopGallery({
 
             <div className="min-h-0 lg:col-start-2 lg:row-start-2 lg:pl-2">
                 <div
+                    data-shoot-target="1"
+                    data-shoot-disappear="1"
                     data-testid="featured-work-stage"
                     className="w-full overflow-hidden border border-black/10 bg-[#fafbf9] p-8 text-[#171512] dark:border-white/12 dark:bg-[#171512] dark:text-[#f5f1e8] xl:p-10"
                     style={{ height: "clamp(640px, 68vh, 760px)" }}
@@ -299,7 +300,6 @@ export default function Projects({ content }: ProjectsProps) {
     return (
         <section
             id="projects"
-            data-shoot-scroll-interactive="1"
             className="projects-section scroll-mt-24 bg-transparent text-foreground lg:-mt-[23vh]"
             aria-label="Projects"
         >
@@ -316,7 +316,7 @@ export default function Projects({ content }: ProjectsProps) {
 
                     <div className="mt-12 flex flex-col gap-8 sm:mt-14">
                         {content.items.map((project, index) => (
-                            <article key={project.id} className="border border-border bg-[#fafbf9] p-6 text-[#171512] dark:bg-[#171512] dark:text-[#f5f1e8] sm:p-8">
+                            <article key={project.id} data-shoot-target="1" data-shoot-disappear="1" className="border border-border bg-[#fafbf9] p-6 text-[#171512] dark:bg-[#171512] dark:text-[#f5f1e8] sm:p-8">
                                 <p className="font-mono text-[10px] tracking-[0.28em] opacity-55">{String(index + 1).padStart(2, "0")}</p>
                                 <h3 className="mt-3 text-3xl font-black uppercase leading-none tracking-tight">{project.title}</h3>
                                 <p className="mt-5 font-mono text-[10px] uppercase tracking-[0.16em] opacity-60">{project.type} · {project.role}</p>
@@ -338,7 +338,6 @@ export default function Projects({ content }: ProjectsProps) {
                 <ProjectsDesktopGallery
                     activeIndex={activeIndex}
                     selectProject={selectProject}
-                    interactionsDisabled={shootModeOn}
                     projects={content.items}
                     title={content.title}
                     label={content.label}

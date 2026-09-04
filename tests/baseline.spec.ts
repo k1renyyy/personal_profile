@@ -189,3 +189,29 @@ test("touch shooting remains operational", async ({ browser, browserName }) => {
     await context.close();
   }
 });
+
+test("Shoot Mode removes grouped About and Project frames", async ({ page, browserName }) => {
+  test.skip(browserName !== "chromium", "Grouped Shoot targets are verified once in pinned Chromium.");
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/", { waitUntil: "load" });
+
+  const shootToggle = page.getByRole("button", { name: "Toggle shoot mode" });
+  await shootToggle.click({ force: true });
+  await expect(shootToggle).toHaveAttribute("aria-pressed", "true");
+
+  const aboutFrame = page.locator("[data-photo='right'] [data-shoot-target]");
+  await aboutFrame.locator("img").click();
+  await expect(aboutFrame).toHaveAttribute("data-shot-down", "1");
+  await expect(aboutFrame).toHaveCSS("opacity", "0");
+
+  const projectRow = page.locator("[data-testid='featured-work-selectors'] [data-shoot-target]").first();
+  await projectRow.click();
+  await expect(projectRow).toHaveAttribute("data-shot-down", "1");
+  await expect(projectRow).toHaveCSS("opacity", "0");
+
+  const projectStage = page.locator("[data-testid='featured-work-stage'][data-shoot-target]");
+  await projectStage.click({ position: { x: 40, y: 40 } });
+  await expect(projectStage).toHaveAttribute("data-shot-down", "1");
+  await expect(projectStage).toHaveCSS("opacity", "0");
+});
