@@ -1,0 +1,21 @@
+# Featured Work pre-implementation verification
+
+- Branch: `codex/experience-project-design`
+- Required Phase 4 commit: `4729cba`
+- Pre-change rollback SHA: `1042c20c11beacdb8323807b9ebf5caf65de7d22`
+- Working tree immediately before Task 1 writes (`git status --short`):
+
+  ```text
+  ?? .agents/skills/design-visual-frontend/
+  ?? .agents/skills/web-design-guidelines/
+  ?? docs/baseline/featured-work-redesign/
+  ```
+
+  The last path was the supplied, then-uncommitted baseline directory containing `baseline-commit.txt`, `verification.txt`, and the three desktop screenshots. The two `.agents/skills/` directories were pre-existing user-owned paths and were excluded.
+- `git rev-list --left-right --count 4729cba...HEAD`: `0 19`
+- `git merge-base --is-ancestor 4729cba HEAD`: exit 0
+- `npm run build`: pass; static `/`, `/projects`, and seven `/projects/[slug]` paths generated (2026-08-31, before Featured Work implementation)
+- Validated captures: `home-1024x768.png` (1024×768, SHA-256 `0ea4e6a268158520363be7808aaae84bcf999832d3516b809ac4ac3420117e2b`), `home-1440x900.png` (1440×900, SHA-256 `f4dbc8f2b16c8a42428eac6ce3dc1cf86cafc23e39e57edaeb43e27baaceec3d`), and `home-1920x1080.png` (1920×1080, SHA-256 `fa41288cd843e637f06865fc165e7594d0ea730bd7ca16d4c56fbee6234152ab`).
+- RED contract run: `npx playwright test tests/featured-work.spec.ts --project=chromium` exited 1 with 7 expected failures. Every failure was the missing `#projects [data-testid="featured-work-desktop"]` contract; no syntax, build, or local-server error occurred.
+- Post-review RED rerun: the same command exited 1 with 9 expected failures. Every failure again stopped at the missing `#projects [data-testid="featured-work-desktop"]` contract; no syntax, build, or local-server error occurred.
+- Pre-existing untracked paths excluded from this work: `.agents/skills/design-visual-frontend/`, `.agents/skills/web-design-guidelines/`, and the supplied `docs/baseline/featured-work-redesign/pre-implementation/` evidence.

@@ -1,0 +1,30 @@
+{
+  "_id": "drafts.project-poc-1",
+  "_type": "project",
+  "name": "Published Project One — PoC",
+  "role": "Developer",
+  "year": "2025",
+  "summary": "Draft-only PoC marker — must never appear in published queries.",
+  "description": [
+    {
+      "_key": "poc-project-one-description",
+      "_type": "block",
+      "style": "normal",
+      "markDefs": [],
+      "children": [
+        {
+          "_key": "poc-project-one-span",
+          "_type": "span",
+          "marks": [],
+          "text": "This project is synthetic PoC content and does not describe production work."
+        }
+      ]
+    }
+  ],
+  "highlights": [
+    "Validates deterministic order",
+    "Validates controlled rich text"
+  ],
+  "order": 1,
+  "isPublished": true
+}

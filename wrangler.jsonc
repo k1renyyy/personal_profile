@@ -1,0 +1,13 @@
+{
+  "name": "kiren-portfolio",
+  "compatibility_date": "2026-03-18",
+  "assets": {
+    "directory": "./out"
+  },
+  "services": [
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "kiren-portfolio"
+    }
+  ]
+}
