@@ -32,7 +32,7 @@ export default async function RootLayout({
     <html lang="zh-CN" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{
-          __html: `document.documentElement.classList.toggle("dark",localStorage.getItem("theme")==="dark")`,
+          __html: `document.documentElement.classList.toggle("dark",localStorage.getItem("theme")!=="light")`,
         }} />
       </head>
       <body

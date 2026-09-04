@@ -7,12 +7,12 @@ type Theme = "light" | "dark";
 const ThemeContext = createContext<{
     resolvedTheme: Theme;
     setTheme: (theme: Theme) => void;
-}>({ resolvedTheme: "light", setTheme: () => undefined });
+}>({ resolvedTheme: "dark", setTheme: () => undefined });
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
     const [resolvedTheme, setResolvedTheme] = useState<Theme>(() => {
-        if (typeof window === "undefined") return "light";
-        return localStorage.getItem("theme") === "dark" ? "dark" : "light";
+        if (typeof window === "undefined") return "dark";
+        return localStorage.getItem("theme") === "light" ? "light" : "dark";
     });
 
     const setTheme = useCallback((theme: Theme) => {

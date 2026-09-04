@@ -92,16 +92,16 @@ test("responsive themes and keyboard remain operational", async ({ page, browser
   expect(evidence.supabaseRequests).toEqual([]);
 });
 
-test("theme starts light and persists only a manual choice", async ({ page, browserName }) => {
+test("theme starts dark and persists only a manual choice", async ({ page, browserName }) => {
   test.skip(browserName !== "chromium", "Theme persistence is verified once in pinned Chromium.");
   await page.goto("/");
   await page.evaluate(() => localStorage.removeItem("theme"));
   await page.reload();
-  await expect(page.locator("html")).not.toHaveClass(/dark/);
-  await page.getByRole("button", { name: "Switch to dark theme" }).click();
-  expect(await page.evaluate(() => localStorage.getItem("theme"))).toBe("dark");
-  await page.reload();
   await expect(page.locator("html")).toHaveClass(/dark/);
+  await page.getByRole("button", { name: "Switch to light theme" }).click();
+  expect(await page.evaluate(() => localStorage.getItem("theme"))).toBe("light");
+  await page.reload();
+  await expect(page.locator("html")).not.toHaveClass(/dark/);
 });
 
 test("reduced motion, Shoot Mode, WebGL and testimonials remain operational", async ({ page, browserName }) => {
