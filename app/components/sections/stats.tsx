@@ -160,34 +160,36 @@ export default function Stats({ title, paragraphs, photos }: StatsProps) {
                                     data-photo={index === 0 ? "left" : index === 1 ? "center" : "right"}
                                     className={`absolute w-[clamp(9rem,40vw,15rem)] transform-gpu transition-[z-index] hover:z-10 lg:w-[clamp(13rem,20vw,18rem)] ${index === 0 ? "z-1" : index === 1 ? "z-2" : "z-3"}`}
                                 >
-                                    <HeroInteractivePortrait frameClassName="aspect-3/4 w-full">
-                                        {photos[index] ? (
-                                            <Image
-                                                src={photos[index].assetUrl}
-                                                alt={photos[index].alt}
-                                                fill
-                                                loading={index === 0 ? "eager" : "lazy"}
-                                                sizes="(max-width: 1023px) 40vw, 20vw"
-                                                className="object-cover"
-                                                style={photos[index].focalPoint ? {
-                                                    objectPosition: `${photos[index].focalPoint.x * 100}% ${photos[index].focalPoint.y * 100}%`,
-                                                } : undefined}
-                                            />
-                                        ) : (
-                                            <div
-                                                role="img"
-                                                aria-label={`${photo.label} placeholder`}
-                                                className={`relative flex h-full w-full items-end overflow-hidden p-4 ${photo.className}`}
-                                            >
-                                                <span className="absolute -right-2 -top-6 font-black text-[7rem] leading-none tracking-[-0.08em] text-foreground/8" aria-hidden="true">
-                                                    {index + 1}
-                                                </span>
-                                                <span className="relative font-mono text-[10px] uppercase tracking-[0.28em] text-foreground/60">
-                                                    {photo.label} / Placeholder
-                                                </span>
-                                            </div>
-                                        )}
-                                    </HeroInteractivePortrait>
+                                    <div data-shoot-target="1">
+                                        <HeroInteractivePortrait frameClassName="aspect-3/4 w-full">
+                                            {photos[index] ? (
+                                                <Image
+                                                    src={photos[index].assetUrl}
+                                                    alt={photos[index].alt}
+                                                    fill
+                                                    loading={index === 0 ? "eager" : "lazy"}
+                                                    sizes="(max-width: 1023px) 40vw, 20vw"
+                                                    className="object-cover"
+                                                    style={photos[index].focalPoint ? {
+                                                        objectPosition: `${photos[index].focalPoint.x * 100}% ${photos[index].focalPoint.y * 100}%`,
+                                                    } : undefined}
+                                                />
+                                            ) : (
+                                                <div
+                                                    role="img"
+                                                    aria-label={`${photo.label} placeholder`}
+                                                    className={`relative flex h-full w-full items-end overflow-hidden p-4 ${photo.className}`}
+                                                >
+                                                    <span className="absolute -right-2 -top-6 font-black text-[7rem] leading-none tracking-[-0.08em] text-foreground/8" aria-hidden="true">
+                                                        {index + 1}
+                                                    </span>
+                                                    <span className="relative font-mono text-[10px] uppercase tracking-[0.28em] text-foreground/60">
+                                                        {photo.label} / Placeholder
+                                                    </span>
+                                                </div>
+                                            )}
+                                        </HeroInteractivePortrait>
+                                    </div>
                                 </div>
                             ))}
                         </div>
