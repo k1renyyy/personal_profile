@@ -44,7 +44,7 @@ export default function FloatingSocials({socialLinks}: {socialLinks: SocialLinkC
 
     return (
         <div
-            className={`fixed right-6 top-1/2 -translate-y-1/2 z-50 hidden xl:flex flex-col gap-4 transition-all duration-500 ${
+            className={`fixed right-6 top-1/2 -translate-y-1/2 z-50 hidden xl:flex flex-col gap-4 transition-[opacity,transform] duration-500 ${
                 visible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-8 pointer-events-none"
             }`}
         >
@@ -55,7 +55,7 @@ export default function FloatingSocials({socialLinks}: {socialLinks: SocialLinkC
                     target={social.platform === "email" ? undefined : "_blank"}
                     rel={social.platform === "email" ? undefined : "noopener noreferrer"}
                     aria-label={social.accessibilityLabel}
-                    className="group flex items-center justify-center w-11 h-11 rounded-full border border-border text-foreground/55 hover:text-foreground hover:border-foreground/40 hover:bg-muted transition-all duration-300"
+                    className="group flex items-center justify-center w-11 h-11 rounded-full border border-border text-foreground/55 hover:text-foreground hover:border-foreground/40 hover:bg-muted transition-[color,background-color,border-color] duration-300"
                 >
                     <SocialIcon platform={social.platform} />
                 </a>

@@ -1,15 +1,15 @@
 import {expect, test} from "@playwright/test";
 
-test("renders the approved Phase 4 identity and safe metadata", async ({page}) => {
+test("renders the approved identity and production metadata", async ({page}) => {
   await page.goto("/");
   await expect(page.getByText("KIREN", {exact: true}).first()).toBeVisible();
   await expect(page.locator("span:visible", {hasText: /^AI Product$/}).first()).toBeVisible();
   await expect(page.getByRole("link", {name: /GitHub/i}).first()).toHaveAttribute("href", "https://github.com/k1renyyy");
   await expect(page.getByRole("link", {name: /LinkedIn/i}).first()).toHaveAttribute("href", "https://www.linkedin.com/in/zhuoli-yu");
   await expect(page.locator('a[href="mailto:zy3690@nyu.edu"]').first()).toBeAttached();
-  await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
-  await expect(page.locator('link[rel="canonical"]')).toHaveCount(0);
-  await expect(page.locator('meta[property="og:image"]')).toHaveCount(0);
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", "index, follow");
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", "https://personal-profile-sooty-six.vercel.app/");
+  await expect(page.locator('meta[property="og:image"]')).toHaveAttribute("content", /cdn\.sanity\.io/);
   await expect(page.getByRole("link", {name: /repository/i})).toHaveCount(0);
 
   for (const link of await page.locator('a[href^="https://github.com/k1renyyy"], a[href^="https://www.linkedin.com/in/zhuoli-yu"]').all()) {

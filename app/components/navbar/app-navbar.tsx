@@ -33,7 +33,7 @@ export default function AppNavbar({brandLabel}: {brandLabel: string}) {
                         onClick={() =>
                             setTheme(resolvedTheme === "dark" ? "light" : "dark")
                         }
-                        className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-background text-foreground/80 transition-colors hover:border-foreground/20 hover:bg-muted"
+                        className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-border bg-background text-foreground/80 transition-colors hover:border-foreground/20 hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring/60"
                         aria-label={
                             themeReady
                                 ? resolvedTheme === "dark"

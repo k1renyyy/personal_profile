@@ -24,7 +24,7 @@ export default function Contact({
     socialLinks: SocialLinkContent[];
 }) {
     const [copied, setCopied] = useState(false);
-    const emailRef = useRef<HTMLAnchorElement>(null);
+    const emailRef = useRef<HTMLDivElement>(null);
 
     const copyEmail = (e: React.MouseEvent) => {
         e.preventDefault();
@@ -96,7 +96,7 @@ export default function Contact({
                     <div className="space-y-12">
                         <div className="space-y-2 overflow-hidden">
                             <div className="overflow-hidden">
-                                <span className="contact-header-text block text-xs uppercase tracking-[0.3em] text-foreground/45 font-medium mb-4">
+                                <span className="contact-header-text block text-xs uppercase tracking-[0.3em] text-foreground/45 dark:text-foreground/60 font-medium mb-4">
                                     Contact
                                 </span>
                             </div>
@@ -126,7 +126,7 @@ export default function Contact({
                                         href={link.url}
                                         target={link.platform === "email" ? undefined : "_blank"}
                                         rel={link.platform === "email" ? undefined : "noopener noreferrer"}
-                                        className="group flex items-center justify-center w-12 h-12 rounded-full border border-border bg-muted/30 hover:bg-foreground hover:border-transparent transition-all duration-300"
+                                        className="group flex items-center justify-center w-12 h-12 rounded-full border border-border bg-muted/30 hover:bg-foreground hover:border-transparent transition-[color,background-color,border-color] duration-300"
                                         aria-label={link.accessibilityLabel}
                                     >
                                         <Icon className="w-5 h-5 text-foreground/60 group-hover:text-background transition-colors duration-300" />
@@ -139,31 +139,32 @@ export default function Contact({
 
                     {/* Right Column: Interactive Email Card */}
                     <div className="w-full h-full flex flex-col justify-center lg:pt-12">
-                        <a 
+                        <div
                             ref={emailRef}
-                            href={email.href}
                             className="email-card group relative block w-full h-[300px] lg:h-[400px] overflow-hidden bg-transparent border-t border-border hover:border-foreground/50 transition-colors duration-500 pt-8 sm:pt-12"
                         >
                             <div className="relative h-full flex flex-col justify-between z-10 px-2 sm:px-0 lg:pb-20">
-                                <div className="flex justify-between items-start">
+                                <a href={email.href} aria-label={`Email ${email.address}`} className="flex justify-between items-start">
                                     <div className="p-0">
                                         <Mail className="w-8 h-8 text-foreground/50 group-hover:text-foreground transition-colors duration-500" />
                                     </div>
                                     <div className="email-icon">
-                                        <ArrowUpRight className="w-8 h-8 text-foreground/35 group-hover:text-foreground group-hover:rotate-45 transition-all duration-300" />
+                                        <ArrowUpRight className="w-8 h-8 text-foreground/35 group-hover:text-foreground group-hover:rotate-45 transition-[color,transform] duration-300" />
                                     </div>
-                                </div>
+                                </a>
 
                                 <div>
-                                    <span className="text-xs uppercase tracking-[0.2em] text-foreground/45 mb-4 block">Drop me a line</span>
-                                    <h3 className="flex flex-col text-xl sm:text-3xl md:text-4xl lg:text-3xl xl:text-4xl 2xl:text-5xl font-black uppercase text-foreground mb-8 leading-[0.9]">
-                                        <span>{email.localPart}</span>
-                                        <span className="text-foreground/50">{email.domainPart}</span>
-                                    </h3>
+                                    <a href={email.href} className="block">
+                                        <span className="text-xs uppercase tracking-[0.2em] text-foreground/45 dark:text-foreground/60 mb-4 block">Drop me a line</span>
+                                        <h3 className="flex flex-col text-xl sm:text-3xl md:text-4xl lg:text-3xl xl:text-4xl 2xl:text-5xl font-black uppercase text-foreground mb-8 leading-[0.9]">
+                                            <span>{email.localPart}</span>
+                                            <span className="text-foreground/50">{email.domainPart}</span>
+                                        </h3>
+                                    </a>
                                     
                                     <button 
                                         onClick={copyEmail}
-                                        className="inline-flex items-center gap-3 text-sm uppercase tracking-wider text-foreground/50 hover:text-foreground transition-all group/btn"
+                                        className="inline-flex items-center gap-3 text-sm uppercase tracking-wider text-foreground/50 hover:text-foreground transition-colors group/btn"
                                     >
                                         {copied ? (
                                             <>
@@ -179,7 +180,7 @@ export default function Contact({
                                     </button>
                                 </div>
                             </div>
-                        </a>
+                        </div>
                     </div>
 
                 </div>

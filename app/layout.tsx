@@ -30,6 +30,11 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="zh-CN" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{
+          __html: `document.documentElement.classList.toggle("dark",localStorage.getItem("theme")==="dark")`,
+        }} />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

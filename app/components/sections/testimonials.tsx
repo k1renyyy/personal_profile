@@ -68,7 +68,7 @@ export default function Testimonials({ content }: TestimonialsProps) {
         <section ref={containerRef} className="testimonials-section relative w-full pt-16 pb-24 overflow-hidden bg-transparent">
             <div className="max-w-[1920px] mx-auto px-4 sm:px-6 md:px-12 lg:px-20 mb-20">
                 <div className="flex flex-col gap-4">
-                    <span className="testimonial-header text-xs uppercase tracking-[0.3em] text-foreground/45 font-medium">{content.intro}</span>
+                    <span className="testimonial-header text-xs uppercase tracking-[0.3em] text-foreground/45 dark:text-foreground/60 font-medium">{content.intro}</span>
                     <h2 className="testimonial-header text-[clamp(2.5rem,6vw,6rem)] font-black uppercase leading-[0.9] text-foreground">
                         {titleLines.slice(0, titleBreak).join(" ")} <br /> {titleLines.slice(titleBreak).join(" ")}
                     </h2>
@@ -103,7 +103,7 @@ export default function Testimonials({ content }: TestimonialsProps) {
                                     </div>
                                     <div>
                                         <h4 className="font-bold text-foreground uppercase tracking-wider text-xs">{testimonial.name}</h4>
-                                        <p className="text-[10px] text-foreground/45 uppercase tracking-widest mt-1">{testimonial.company}</p>
+                                        <p className="text-[10px] text-foreground/45 dark:text-foreground/60 uppercase tracking-widest mt-1">{testimonial.company}</p>
                                     </div>
                                 </div>
                             </div>

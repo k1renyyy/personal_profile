@@ -193,7 +193,7 @@ const ProjectsDesktopGallery = memo(function ProjectsDesktopGallery({
             className="hidden lg:grid lg:grid-cols-[minmax(0,320px)_minmax(0,1fr)] lg:items-start lg:gap-x-10 lg:gap-y-5 xl:grid-cols-[360px_minmax(0,1fr)] xl:gap-x-14"
         >
             <div className="lg:col-start-1 lg:row-start-1">
-                <span className="mb-3 block font-mono text-[10px] uppercase tracking-[0.35em] text-foreground/45">
+                <span className="mb-3 block font-mono text-[10px] uppercase tracking-[0.35em] text-foreground/45 dark:text-foreground/60">
                     {label}
                 </span>
                 <h2 className="text-3xl font-black uppercase leading-[0.95] tracking-tighter text-foreground sm:text-4xl lg:text-5xl">
@@ -306,7 +306,7 @@ export default function Projects({ content }: ProjectsProps) {
             <div className="mx-auto w-full max-w-[1920px] px-5 py-14 sm:px-8 md:px-12 lg:px-14 xl:px-18 2xl:max-w-none 2xl:pl-24 2xl:pr-0">
                 {/* ——— Below lg: single column, stacked projects (theme) ——— */}
                 <div data-testid="featured-work-mobile" className="lg:hidden">
-                    <span className="mb-3 block font-mono text-[10px] uppercase tracking-[0.35em] text-foreground/45">{content.label}</span>
+                    <span className="mb-3 block font-mono text-[10px] uppercase tracking-[0.35em] text-foreground/45 dark:text-foreground/60">{content.label}</span>
                     <h2 className="text-3xl font-black uppercase leading-[0.95] tracking-tighter text-foreground sm:text-4xl md:text-5xl">
                         {content.title}
                     </h2>

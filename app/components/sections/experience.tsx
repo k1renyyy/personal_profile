@@ -78,7 +78,7 @@ function MobileExperienceTabs({ experiences }: {experiences: ExperienceItem[]}) 
                 <span className="size-1.5 shrink-0 rounded-full border border-foreground/35 bg-transparent group-data-[state=active]:border-foreground group-data-[state=active]:bg-foreground" aria-hidden="true" />
                 {experience.company}
               </span>
-              <span className="mt-1 block pl-[18px] font-mono text-[11px] uppercase tracking-[0.16em] text-foreground/45">
+              <span className="mt-1 block pl-[18px] font-mono text-[11px] uppercase tracking-[0.16em] text-foreground/45 dark:text-foreground/60">
                 {experience.dateRange}
               </span>
             </span>
@@ -401,7 +401,7 @@ function DesktopExperienceCards({ experiences, title, label }: {experiences: Exp
         <header ref={headerRef} className="absolute inset-x-0 top-0 z-20 mx-auto w-full max-w-[1920px] px-20 pt-8 xl:px-32 2xl:px-44 2xl:pt-10">
           <div className="flex items-end gap-4 border-b border-border pb-4">
             <h2 id="experience-heading-desktop" className="text-[clamp(2.5rem,6vw,6rem)] font-black uppercase leading-none tracking-tight text-foreground">{title}</h2>
-            <span className="pb-1 font-mono text-xs uppercase tracking-[0.28em] text-foreground/45">{label}</span>
+            <span className="pb-1 font-mono text-xs uppercase tracking-[0.28em] text-foreground/45 dark:text-foreground/60">{label}</span>
           </div>
           </header>
           <ol ref={stackRef} data-testid="experience-card-stack" className="absolute inset-x-0 bottom-[clamp(1rem,3vh,2rem)] top-[clamp(8rem,17vh,11rem)] mx-auto flex max-w-[1640px] list-none items-center justify-center gap-[clamp(16px,1.5vw,24px)] px-4 xl:px-8">
@@ -468,7 +468,7 @@ export default function Experience({ items, title, label }: {items: ExperienceCo
       <div className="mx-auto w-full max-w-[1920px] px-4 sm:px-6 md:px-12 lg:hidden">
         <header className="flex items-end gap-4 border-b border-border pb-5">
           <h2 id="experience-heading-mobile" className="text-[clamp(2.5rem,6vw,6rem)] font-black uppercase leading-none tracking-tight text-foreground">{title}</h2>
-          <span className="pb-1 font-mono text-xs uppercase tracking-[0.28em] text-foreground/45">{label}</span>
+          <span className="pb-1 font-mono text-xs uppercase tracking-[0.28em] text-foreground/45 dark:text-foreground/60">{label}</span>
         </header>
         <div className="py-10"><MobileExperienceTabs experiences={experiences} /></div>
       </div>
