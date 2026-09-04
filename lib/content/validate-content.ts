@@ -1,7 +1,6 @@
 import type {
   ContentDomain,
   DomainContentMap,
-  ProductionContentSnapshot,
   ProductionMediaContent,
 } from "./types";
 
@@ -73,12 +72,6 @@ function portableText(value: unknown): Record<string, unknown>[] {
     fail("Invalid published content");
   }
   return blocks as Record<string, unknown>[];
-}
-
-function yearMonth(value: unknown): string {
-  const date = string(value);
-  if (!/^\d{4}-(0[1-9]|1[0-2])$/.test(date)) fail("Invalid published content");
-  return date;
 }
 
 function visibleOrder(item: Record<string, unknown>): number {
@@ -169,75 +162,6 @@ function validateProfile(value: unknown): DomainContentMap["profile"] {
   };
 }
 
-function twoLines(value: unknown): [string, string] {
-  const values = strings(value);
-  if (values.length !== 2) fail("Invalid published content");
-  return [values[0], values[1]];
-}
-
-function validateHomepage(value: unknown): DomainContentMap["homepage"] {
-  const item = record(value);
-  const aboutPhotos = item.aboutPhotos == null ? undefined : array(item.aboutPhotos).map(validateMedia);
-  if (aboutPhotos && aboutPhotos.length !== 3) fail("Homepage requires exactly three about photos");
-  return {
-    _id: id(item._id),
-    heroTitleLines: twoLines(item.heroTitleLines),
-    heroNameLines: twoLines(item.heroNameLines),
-    heroTechChips: strings(item.heroTechChips),
-    regionLabel: string(item.regionLabel),
-    valuePropositionLines: twoLines(item.valuePropositionLines),
-    availability: string(item.availability),
-    primaryCtaLabel: string(item.primaryCtaLabel),
-    aboutTitle: string(item.aboutTitle),
-    aboutLabel: string(item.aboutLabel),
-    about: portableText(item.about),
-    aboutPhotos,
-    marqueePrimaryLines: twoLines(item.marqueePrimaryLines),
-    marqueeSecondaryLines: twoLines(item.marqueeSecondaryLines),
-    skillTickerItems: strings(item.skillTickerItems),
-    experienceTitle: string(item.experienceTitle),
-    experienceLabel: string(item.experienceLabel),
-    experienceIntro: string(item.experienceIntro),
-    projectsTitle: string(item.projectsTitle),
-    projectsLabel: string(item.projectsLabel),
-    projectsIntro: string(item.projectsIntro),
-    testimonialsTitle: string(item.testimonialsTitle),
-    testimonialsIntro: string(item.testimonialsIntro),
-    contactTitleLines: twoLines(item.contactTitleLines),
-    contactInvitation: string(item.contactInvitation),
-  };
-}
-
-function validateEducation(value: unknown): DomainContentMap["educations"][number] {
-  const item = record(value);
-  const relatedUrl = item.relatedUrl == null ? undefined : https(item.relatedUrl, "Invalid education link");
-  return {_id: id(item._id), institution: string(item.institution), degree: string(item.degree), fieldOfStudy: string(item.fieldOfStudy), location: string(item.location), startDate: yearMonth(item.startDate), endDate: yearMonth(item.endDate), isExpected: boolean(item.isExpected), description: optionalString(item.description), highlights: strings(item.highlights), relatedUrl, order: visibleOrder(item), isVisible: item.isVisible as boolean};
-}
-
-function validateExperience(value: unknown): DomainContentMap["experiences"][number] {
-  const item = record(value);
-  return {_id: id(item._id), company: string(item.company), role: string(item.role), timeLabel: string(item.timeLabel), outcomes: strings(item.outcomes), order: visibleOrder(item), isVisible: item.isVisible as boolean};
-}
-
-function validateCapabilityGroup(value: unknown): DomainContentMap["capabilityGroups"][number] {
-  const item = record(value);
-  return {_id: id(item._id), name: string(item.name), items: strings(item.items), order: visibleOrder(item), isVisible: item.isVisible as boolean};
-}
-
-function validateProject(value: unknown): DomainContentMap["projects"][number] {
-  const item = record(value);
-  return {_id: id(item._id), name: string(item.name), projectType: string(item.projectType), role: string(item.role), summary: string(item.summary), outcomes: strings(item.outcomes), capabilities: strings(item.capabilities), order: visibleOrder(item), isVisible: item.isVisible as boolean};
-}
-
-function validateTestimonial(value: unknown): DomainContentMap["testimonials"][number] {
-  const item = record(value);
-  const permissionStatus = string(item.permissionStatus);
-  if (!(["pending", "granted", "denied"] as string[]).includes(permissionStatus)) fail("Invalid published content");
-  const isVisible = boolean(item.isVisible);
-  if (isVisible && permissionStatus !== "granted") fail("Visible testimonial requires granted permission");
-  return {_id: id(item._id), personName: string(item.personName), personRole: string(item.personRole), company: string(item.company), relationship: string(item.relationship), quote: string(item.quote), date: optionalString(item.date), portrait: item.portrait == null ? undefined : validateMedia(item.portrait), permissionStatus: permissionStatus as "pending" | "granted" | "denied", permissionNote: optionalString(item.permissionNote), order: visibleOrder(item), isVisible};
-}
-
 function validateSocialLink(value: unknown): DomainContentMap["socialLinks"][number] {
   const item = record(value);
   const platform = string(item.platform);
@@ -249,14 +173,7 @@ function validateSocialLink(value: unknown): DomainContentMap["socialLinks"][num
 const validators: {[K in ContentDomain]: (value: unknown) => DomainContentMap[K]} = {
   siteSettings: validateSiteSettings,
   profile: validateProfile,
-  homepage: validateHomepage,
-  educations: (value) => ordered(value, "education", validateEducation),
-  experiences: (value) => ordered(value, "experience", validateExperience),
-  capabilityGroups: (value) => ordered(value, "capability group", validateCapabilityGroup),
-  projects: (value) => ordered(value, "project", validateProject),
-  testimonials: (value) => ordered(value, "testimonial", validateTestimonial),
   socialLinks: (value) => ordered(value, "social link", validateSocialLink),
-  mediaRecords: (value) => array(value).map(validateMedia),
 };
 
 function hasDraftId(value: unknown): boolean {
@@ -275,21 +192,4 @@ export function validateDomain<K extends ContentDomain>(
 ): DomainContentMap[K] {
   if (hasDraftId(value)) fail("Draft content is not allowed");
   return validators[domain](value);
-}
-
-export function validatePublishedContent(value: unknown): ProductionContentSnapshot {
-  if (hasDraftId(value)) fail("Draft content is not allowed");
-  const snapshot = record(value);
-  return {
-    siteSettings: validateDomain("siteSettings", snapshot.siteSettings),
-    profile: validateDomain("profile", snapshot.profile),
-    homepage: validateDomain("homepage", snapshot.homepage),
-    educations: validateDomain("educations", snapshot.educations),
-    experiences: validateDomain("experiences", snapshot.experiences),
-    capabilityGroups: validateDomain("capabilityGroups", snapshot.capabilityGroups),
-    projects: validateDomain("projects", snapshot.projects),
-    testimonials: validateDomain("testimonials", snapshot.testimonials),
-    socialLinks: validateDomain("socialLinks", snapshot.socialLinks),
-    mediaRecords: validateDomain("mediaRecords", snapshot.mediaRecords),
-  };
 }

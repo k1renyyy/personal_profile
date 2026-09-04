@@ -27,7 +27,21 @@ export default function Stats({ title, paragraphs, photos }: StatsProps) {
     const sectionRef = useRef<HTMLElement>(null);
 
     useEffect(() => {
-        if (!sectionRef.current) return;
+        const section = sectionRef.current;
+        if (!section) return;
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+            const [left, center, right] = ["left", "center", "right"].map((position) =>
+                section.querySelector<HTMLElement>(`[data-photo='${position}']`),
+            );
+            const spread = window.matchMedia("(min-width: 1024px)").matches ? 68 : 58;
+            if (left && center && right) {
+                gsap.set(left, { xPercent: -spread, yPercent: 8, rotate: -7 });
+                gsap.set(center, { yPercent: -4 });
+                gsap.set(right, { xPercent: spread, yPercent: 8, rotate: 7 });
+                return () => gsap.set([left, center, right], {clearProps: "transform"});
+            }
+            return;
+        }
 
         const ctx = gsap.context(() => {
             const root = sectionRef.current;
@@ -93,14 +107,7 @@ export default function Stats({ title, paragraphs, photos }: StatsProps) {
 
             if (leftPhoto && centerPhoto && rightPhoto) {
                 const spread = window.matchMedia("(min-width: 1024px)").matches ? 68 : 58;
-                const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-                if (reduceMotion) {
-                    gsap.set(leftPhoto, { xPercent: -spread, yPercent: 8, rotate: -7 });
-                    gsap.set(centerPhoto, { yPercent: -4 });
-                    gsap.set(rightPhoto, { xPercent: spread, yPercent: 8, rotate: 7 });
-                } else {
-                    gsap.fromTo(leftPhoto, { xPercent: 0, yPercent: 0, rotate: 0 }, {
+                gsap.fromTo(leftPhoto, { xPercent: 0, yPercent: 0, rotate: 0 }, {
                         xPercent: -spread,
                         yPercent: 8,
                         rotate: -7,
@@ -119,9 +126,8 @@ export default function Stats({ title, paragraphs, photos }: StatsProps) {
                         ease: "none",
                         scrollTrigger: { trigger: rightPanel, start: "top 88%", end: "center 48%", scrub: 0.8 },
                     });
-                }
             }
-        }, sectionRef);
+        }, section);
 
         return () => ctx.revert();
     }, []);
@@ -160,6 +166,7 @@ export default function Stats({ title, paragraphs, photos }: StatsProps) {
                                                 src={photos[index].assetUrl}
                                                 alt={photos[index].alt}
                                                 fill
+                                                loading={index === 0 ? "eager" : "lazy"}
                                                 sizes="(max-width: 1023px) 40vw, 20vw"
                                                 className="object-cover"
                                                 style={photos[index].focalPoint ? {

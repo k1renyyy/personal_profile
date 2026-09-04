@@ -56,15 +56,15 @@ export function validateAndMapHomepage(value: unknown): HomepageViewModel {
   const secondary = strings(homepage.marqueeSecondaryLines, "homepage.marqueeSecondaryLines", 2, 2) as [string, string];
   if (homepage.aboutPhotos != null && !Array.isArray(homepage.aboutPhotos)) throw new Error("homepage.aboutPhotos must be an array");
   const photos = homepage.aboutPhotos == null ? [] : homepage.aboutPhotos.map(validateMedia);
-  if (photos.length !== 0 && photos.length !== 3) throw new Error("homepage.aboutPhotos must contain exactly 3 items");
-  const experiences = ordered(root.experiences, "experiences", 1, 3).map((item, index) => ({
+  if (photos.length !== 3) throw new Error("homepage.aboutPhotos must contain exactly 3 items");
+  const experiences = ordered(root.experiences, "experiences", 3, 3).map((item, index) => ({
     id: text(item._id, `experiences[${index}]._id`),
     company: text(item.company, `experiences[${index}].company`),
     role: text(item.role, `experiences[${index}].role`),
     dateRange: text(item.timeLabel, `experiences[${index}].timeLabel`),
     highlights: strings(item.outcomes, `experiences[${index}].outcomes`, 1, 4),
   }));
-  const projects = ordered(root.projects, "projects", 1, 4).map((item, index) => ({
+  const projects = ordered(root.projects, "projects", 3, 3).map((item, index) => ({
     id: text(item._id, `projects[${index}]._id`),
     title: text(item.name, `projects[${index}].name`),
     type: text(item.projectType, `projects[${index}].projectType`),
@@ -74,6 +74,7 @@ export function validateAndMapHomepage(value: unknown): HomepageViewModel {
     capabilities: strings(item.capabilities, `projects[${index}].capabilities`, 1, 6),
   }));
   const rawTestimonials = Array.isArray(root.testimonials) ? root.testimonials : [];
+  if (rawTestimonials.length !== 6) throw new Error("testimonials must contain exactly 6 items");
   const testimonials = rawTestimonials.map((entry, index) => {
     const item = record(entry, `testimonials[${index}]`);
     const name = text(item.personName, `testimonials[${index}].personName`);

@@ -93,11 +93,11 @@ const FeaturedProjectArticle = memo(function FeaturedProjectArticle({
             aria-labelledby={announcementId}
             className="flex h-full flex-col"
         >
-            <div className="border-b border-[#171512]/15 pb-6">
+            <div className="border-b border-current/15 pb-6">
                 <p
                     data-testid="featured-work-sequence"
                     aria-hidden="true"
-                    className="min-h-4 font-mono text-[10px] font-medium tracking-[0.36em] text-[#171512]/65"
+                    className="min-h-4 font-mono text-[10px] font-medium tracking-[0.36em] opacity-65"
                 >
                     {reduceMotion ? sequence : typedSequence}
                 </p>
@@ -108,7 +108,7 @@ const FeaturedProjectArticle = memo(function FeaturedProjectArticle({
                 >
                     {reduceMotion ? project.title : typedTitle}
                 </h3>
-                <dl className="mt-6 grid grid-cols-2 gap-4 font-mono text-sm uppercase leading-relaxed tracking-[0.16em] text-[#171512]/65">
+                <dl className="mt-6 grid grid-cols-2 gap-4 font-mono text-sm uppercase leading-relaxed tracking-[0.16em] opacity-65">
                     <div>
                         <dt className="sr-only">Project type</dt>
                         <dd>{project.type}</dd>
@@ -128,18 +128,18 @@ const FeaturedProjectArticle = memo(function FeaturedProjectArticle({
                     transform: reduceMotion || contentEntered ? "none" : "translateY(8px)",
                 }}
             >
-                <p className="max-w-3xl text-sm leading-relaxed text-[#171512]/70 xl:text-base">
+                <p className="max-w-3xl text-sm leading-relaxed opacity-70 xl:text-base">
                     {project.summary}
                 </p>
 
                 <div className="mt-6">
-                    <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-[#171512]/65">
+                    <p className="font-mono text-[11px] uppercase tracking-[0.28em] opacity-65">
                         Outcomes
                     </p>
                     <ol className="mt-3 space-y-2">
                         {project.outcomes.map((outcome, index) => (
-                            <li key={outcome} className="flex gap-4 border-t border-[#171512]/12 pt-3 text-base uppercase leading-relaxed tracking-[0.04em] text-[#171512]/80">
-                                <span className="font-mono text-[10px] text-[#171512]/65">
+                            <li key={outcome} className="flex gap-4 border-t border-current/12 pt-3 text-base uppercase leading-relaxed tracking-[0.04em] opacity-80">
+                                <span className="font-mono text-[10px] opacity-65">
                                     {String(index + 1).padStart(2, "0")}
                                 </span>
                                 {outcome}
@@ -149,12 +149,12 @@ const FeaturedProjectArticle = memo(function FeaturedProjectArticle({
                 </div>
 
                 <div data-testid="featured-work-capabilities" className="mt-auto pt-6">
-                    <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-[#171512]/65">
+                    <p className="font-mono text-[11px] uppercase tracking-[0.28em] opacity-65">
                         Capabilities
                     </p>
                     <div className="mt-3 flex flex-wrap gap-2">
                         {project.capabilities.map((capability) => (
-                            <span key={capability} className="border border-[#171512]/20 px-2.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.15em] text-[#171512]/65">
+                            <span key={capability} className="border border-current/20 px-2.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.15em] opacity-65">
                                 {capability}
                             </span>
                         ))}
@@ -224,7 +224,7 @@ const ProjectsDesktopGallery = memo(function ProjectsDesktopGallery({
                                 className={`group flex min-h-16 items-center gap-4 px-4 py-3 text-left outline-none transition-[background-color,border-color] duration-200 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-foreground/60 dark:focus-visible:ring-[#e7dfd5] disabled:cursor-not-allowed disabled:opacity-60 motion-reduce:transition-none ${
                                     isActive
                                         ? "border-l-2 border-[#6f655b] bg-[#fafbf9] dark:border-[#e7dfd5] dark:bg-[#e7dfd5]/10"
-                                        : "border-l border-foreground/15 bg-transparent hover:bg-white/55"
+                                        : "border-l border-foreground/15 bg-transparent hover:bg-white/55 dark:hover:bg-white/8"
                                 }`}
                             >
                                 <span className="font-mono text-[10px] tracking-[0.28em] text-foreground/45 dark:text-foreground/50">
@@ -250,7 +250,7 @@ const ProjectsDesktopGallery = memo(function ProjectsDesktopGallery({
             <div className="min-h-0 lg:col-start-2 lg:row-start-2 lg:pl-2">
                 <div
                     data-testid="featured-work-stage"
-                    className="w-full overflow-hidden border border-black/10 bg-[#fafbf9] p-8 text-[#171512] xl:p-10"
+                    className="w-full overflow-hidden border border-black/10 bg-[#fafbf9] p-8 text-[#171512] dark:border-white/12 dark:bg-[#171512] dark:text-[#f5f1e8] xl:p-10"
                     style={{ height: "clamp(640px, 68vh, 760px)" }}
                 >
                     <div
@@ -316,18 +316,18 @@ export default function Projects({ content }: ProjectsProps) {
 
                     <div className="mt-12 flex flex-col gap-8 sm:mt-14">
                         {content.items.map((project, index) => (
-                            <article key={project.id} className="border border-border bg-[#fafbf9] p-6 text-[#171512] sm:p-8">
-                                <p className="font-mono text-[10px] tracking-[0.28em] text-[#171512]/55">{String(index + 1).padStart(2, "0")}</p>
+                            <article key={project.id} className="border border-border bg-[#fafbf9] p-6 text-[#171512] dark:bg-[#171512] dark:text-[#f5f1e8] sm:p-8">
+                                <p className="font-mono text-[10px] tracking-[0.28em] opacity-55">{String(index + 1).padStart(2, "0")}</p>
                                 <h3 className="mt-3 text-3xl font-black uppercase leading-none tracking-tight">{project.title}</h3>
-                                <p className="mt-5 font-mono text-[10px] uppercase tracking-[0.16em] text-[#171512]/60">{project.type} · {project.role}</p>
-                                <p className="mt-5 text-sm leading-relaxed text-[#171512]/70">{project.summary}</p>
+                                <p className="mt-5 font-mono text-[10px] uppercase tracking-[0.16em] opacity-60">{project.type} · {project.role}</p>
+                                <p className="mt-5 text-sm leading-relaxed opacity-70">{project.summary}</p>
                                 <ol className="mt-5 space-y-2">
                                     {project.outcomes.map((outcome, outcomeIndex) => (
-                                        <li key={outcome} className="flex gap-3 border-t border-[#171512]/12 pt-2 text-xs uppercase text-[#171512]/75"><span className="font-mono text-[9px]">{String(outcomeIndex + 1).padStart(2, "0")}</span>{outcome}</li>
+                                        <li key={outcome} className="flex gap-3 border-t border-current/12 pt-2 text-xs uppercase opacity-75"><span className="font-mono text-[9px]">{String(outcomeIndex + 1).padStart(2, "0")}</span>{outcome}</li>
                                     ))}
                                 </ol>
                                 <div className="mt-6 flex flex-wrap gap-2">
-                                    {project.capabilities.map((capability) => <span key={capability} className="border border-[#171512]/20 px-2.5 py-1.5 font-mono text-[8px] uppercase tracking-[0.15em]">{capability}</span>)}
+                                    {project.capabilities.map((capability) => <span key={capability} className="border border-current/20 px-2.5 py-1.5 font-mono text-[8px] uppercase tracking-[0.15em]">{capability}</span>)}
                                 </div>
                             </article>
                         ))}

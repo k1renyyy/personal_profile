@@ -158,7 +158,7 @@ export function HeroInteractivePortrait({
                 <div className="relative z-0 h-full w-full">
                     <div
                         className={cn(
-                            "h-full w-full transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
+                            "relative h-full w-full transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
                             !reduceMotion && "group-hover:scale-[1.02]"
                         )}
                     >

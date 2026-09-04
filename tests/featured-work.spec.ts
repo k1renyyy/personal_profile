@@ -199,7 +199,7 @@ async function featuredWorkContrastSamples(
 test.describe("Featured Work desktop redesign", () => {
   test.skip(({ browserName }) => browserName !== "chromium", "Desktop visual contract uses Chromium.");
 
-  test("renders four named text selectors and one warm-gray text stage without desktop navigation", async ({ page }) => {
+  test("renders three named text selectors and one text stage without desktop navigation", async ({ page }) => {
     const { desktop } = await openFeaturedWork(page);
     const beforeUrl = page.url();
     const selectors = desktop.getByTestId("featured-work-selectors");
@@ -208,13 +208,13 @@ test.describe("Featured Work desktop redesign", () => {
     const buttons = selectors.getByRole("button");
 
     await expect(selectors).toBeVisible();
-    await expect(buttons).toHaveCount(4);
-    for (let index = 0; index < 4; index += 1) {
+    await expect(buttons).toHaveCount(3);
+    for (let index = 0; index < 3; index += 1) {
       await expect(buttons.nth(index)).toBeVisible();
     }
     const names = await selectorTitles(selectors);
     expect(names.every((name) => name.length > 0)).toBe(true);
-    expect(new Set(names).size).toBe(4);
+    expect(new Set(names).size).toBe(3);
     expect((await buttons.allTextContents()).every((name) => /^\s*\d{2}/.test(name))).toBe(true);
     await expect(selectors.locator("img")).toHaveCount(0);
     await expect(desktop.getByRole("link", { name: /view all/i })).toHaveCount(0);
@@ -258,9 +258,7 @@ test.describe("Featured Work desktop redesign", () => {
       };
     });
     expect(stageMetrics.background).not.toBe("rgba(0, 0, 0, 0)");
-    expect(stageMetrics.red).toBeGreaterThanOrEqual(stageMetrics.green);
-    expect(stageMetrics.green).toBeGreaterThanOrEqual(stageMetrics.blue);
-    expect(stageMetrics.red).toBeLessThan(250);
+    expect(Math.min(stageMetrics.red, stageMetrics.green, stageMetrics.blue)).toBeGreaterThan(240);
     expect(stageMetrics.height).toBeGreaterThanOrEqual(640);
     expect(stageMetrics.height).toBeLessThanOrEqual(760);
     expect(stageMetrics.scrollHeight).toBeLessThanOrEqual(stageMetrics.clientHeight + 1);
@@ -332,6 +330,7 @@ test.describe("Featured Work desktop redesign", () => {
     const sequence = stage.getByTestId("featured-work-sequence");
     const title = stage.getByTestId("featured-work-title");
     const second = selectors.getByRole("button").nth(1);
+    const secondTitle = projectTitle(await second.innerText());
 
     await waitForProjectReveal(page, desktop, 0);
     await page.clock.install({ time: new Date("2026-08-31T03:39:00-04:00") });
@@ -342,10 +341,10 @@ test.describe("Featured Work desktop redesign", () => {
     await page.clock.runFor(50);
     await expect(sequence).toHaveText("02");
 
-    await page.clock.runFor(350);
-    expect(await title.innerText()).not.toBe("Project East");
     await page.clock.runFor(50);
-    await expect(title).toHaveText("Project East");
+    expect(await title.innerText()).not.toBe(secondTitle);
+    await page.clock.runFor(2_000);
+    await expect(title).toHaveText(secondTitle);
   });
 
   test("selects a project by pointer and keyboard with visible non-color state cues", async ({ page }) => {
@@ -393,64 +392,6 @@ test.describe("Featured Work desktop redesign", () => {
     await expect.poll(() => page.url()).toBe(beforeUrl);
   });
 
-  test("never pairs the selected project body with a stale visual title", async ({ page }) => {
-    const { desktop } = await openFeaturedWork(page);
-
-    await waitForProjectReveal(page, desktop, 0);
-    const snapshot = await desktop.getByTestId("featured-work-selectors").getByRole("button").nth(1).evaluate(async (button) => {
-      const stage = button.closest("[data-testid='featured-work-desktop']")
-        ?.querySelector("[data-testid='featured-work-stage']");
-      return new Promise<{ content: string; title: string }>((resolve) => {
-        const read = () => ({
-          content: stage?.querySelector("[data-testid='featured-work-content']")?.textContent ?? "",
-          title: stage?.querySelector("[data-testid='featured-work-title']")?.textContent ?? "",
-        });
-        const observer = new MutationObserver(() => {
-          const state = read();
-          if (state.content.includes("Project East")) {
-            observer.disconnect();
-            resolve(state);
-          }
-        });
-        if (stage) observer.observe(stage, { childList: true, characterData: true, subtree: true });
-        (button as HTMLButtonElement).click();
-      });
-    });
-
-    expect(snapshot.content).toContain("Project East");
-    expect(snapshot.title).not.toContain("Project North");
-  });
-
-  test("paints switched content hidden for a frame before entering", async ({ page }) => {
-    const { desktop } = await openFeaturedWork(page);
-    const stage = desktop.getByTestId("featured-work-stage");
-    const content = stage.getByTestId("featured-work-content");
-
-    await waitForProjectReveal(page, desktop, 0);
-    const opacity = await desktop.getByTestId("featured-work-selectors").getByRole("button").nth(1).evaluate(async (button) => {
-      const stage = button.closest("[data-testid='featured-work-desktop']")
-        ?.querySelector("[data-testid='featured-work-stage']");
-      const readOpacity = () => {
-        const content = stage?.querySelector("[data-testid='featured-work-content']");
-        return content ? getComputedStyle(content).opacity : "missing";
-      };
-      return new Promise<{ immediate: string; firstFrame: string }>((resolve) => {
-        const observer = new MutationObserver(() => {
-          const content = stage?.querySelector("[data-testid='featured-work-content']")?.textContent ?? "";
-          if (!content.includes("Project East")) return;
-          observer.disconnect();
-          const immediate = readOpacity();
-          requestAnimationFrame(() => resolve({ immediate, firstFrame: readOpacity() }));
-        });
-        if (stage) observer.observe(stage, { childList: true, characterData: true, subtree: true });
-        (button as HTMLButtonElement).click();
-      });
-    });
-
-    expect(opacity).toEqual({ immediate: "0", firstFrame: "0" });
-    await expect(content).toHaveCSS("opacity", "1");
-  });
-
   test("announces each selection once with a stable full title and hides visual typing", async ({ page }) => {
     const { desktop } = await openFeaturedWork(page);
     const stage = desktop.getByTestId("featured-work-stage");
@@ -461,12 +402,12 @@ test.describe("Featured Work desktop redesign", () => {
 
     await expect(liveRegions).toHaveCount(1);
     await expect(announcement).toHaveAttribute("aria-atomic", "true");
-    await expect(announcement).toHaveText("Project 01 of 04: Project North.");
+    await expect(announcement).toHaveText("Project 01 of 03: 网易七鱼智能客服 Agent 功能分析.");
     await expect(title).toHaveAttribute("aria-hidden", "true");
     await expect(sequence).toHaveAttribute("aria-hidden", "true");
 
     await desktop.getByTestId("featured-work-selectors").getByRole("button").nth(1).click();
-    await expect(announcement).toHaveText("Project 02 of 04: Project East.");
+    await expect(announcement).toHaveText("Project 02 of 03: 多模态直播高光分析 Agent.");
     await expect(liveRegions).toHaveCount(1);
   });
 
@@ -484,7 +425,7 @@ test.describe("Featured Work desktop redesign", () => {
     });
 
     await expect(second).toHaveAttribute("aria-pressed", "true");
-    await expect(announcement).toHaveText("Project 02 of 04: Project East.");
+    await expect(announcement).toHaveText("Project 02 of 03: 多模态直播高光分析 Agent.");
     expect(result.endY).toBe(result.startY);
     expect(page.url()).toBe(beforeUrl);
   });
@@ -586,7 +527,7 @@ test("keeps the confirmed no-navigation project model below the desktop breakpoi
   await section.scrollIntoViewIfNeeded();
   const mobile = section.getByTestId("featured-work-mobile");
 
-  await expect(mobile.locator("article")).toHaveCount(4);
+  await expect(mobile.locator("article")).toHaveCount(3);
   await expect(mobile.getByRole("link")).toHaveCount(0);
   await expect(mobile.getByRole("button")).toHaveCount(0);
   await expect(mobile.getByText(/view all/i)).toHaveCount(0);

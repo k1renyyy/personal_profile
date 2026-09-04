@@ -57,7 +57,7 @@ test.describe("Experience desktop three-column flip", () => {
     expect(covered.every((opacity) => opacity > 0.95)).toBe(true);
 
     await scrollExperienceTo(page, track, 0.4);
-    await expect(stage.getByRole("heading", { name: "EXPERIENCE" })).toBeVisible();
+    await expect(stage.getByRole("heading", { name: "工作经历" })).toBeVisible();
     await expect(stage.getByText("工作经历", { exact: true })).toBeVisible();
     await expect(track.getByTestId("experience-card")).toHaveCount(3);
     await expect(track.getByTestId("experience-card-artwork")).toHaveCount(3);
@@ -91,11 +91,11 @@ test.describe("Experience desktop three-column flip", () => {
     expect(cards[0].right).toBeLessThanOrEqual(cards[1].left + 1);
     expect(cards[1].right).toBeLessThanOrEqual(cards[2].left + 1);
     expect(cards[0].width).toBeGreaterThan(opening[0].width * 1.35);
-    const heading = await stage.getByRole("heading", { name: "EXPERIENCE" }).boundingBox();
+    const heading = await stage.getByRole("heading", { name: "工作经历" }).boundingBox();
     expect(heading).not.toBeNull();
     expect(cards.every((card) => card.top > heading!.y + heading!.height)).toBe(true);
     expect(cards.every((card) => card.bottom <= desktopViewport.height)).toBe(true);
-    for (const company of ["Company One", "Company Two", "Company Three"]) {
+    for (const company of ["网易互娱", "bilibili", "姚基金"]) {
       await expect(track.getByRole("heading", { name: company })).toBeVisible();
     }
     await expect(track).not.toContainText("Location One");
@@ -108,7 +108,7 @@ test.describe("Experience desktop three-column flip", () => {
     for (const progress of [0.58, 0.68, 0.76, 0.82]) {
       await scrollExperienceTo(page, track, progress);
       await expect(track.getByTestId("experience-card")).toHaveCount(3);
-      for (const company of ["Company One", "Company Two", "Company Three"]) {
+      for (const company of ["网易互娱", "bilibili", "姚基金"]) {
         await expect(track.getByTestId("experience-card").filter({ hasText: company })).toHaveCount(1);
       }
     }
@@ -264,7 +264,7 @@ test.describe("Experience desktop three-column flip", () => {
       await page.goto("/", { waitUntil: "networkidle" });
       const track = page.getByTestId("experience-track");
       await scrollExperienceTo(page, track, 0.84);
-      const heading = await track.getByRole("heading", { name: "EXPERIENCE" }).boundingBox();
+      const heading = await track.getByRole("heading", { name: "工作经历" }).boundingBox();
       const cards = await cardGeometry(track);
       expect(heading, `${viewport.width}x${viewport.height}`).not.toBeNull();
       expect(cards.every((card) => card.top > heading!.y + heading!.height)).toBe(true);
@@ -305,7 +305,7 @@ test.describe("Experience desktop three-column flip", () => {
     await scrollExperienceTo(page, track, 0.8);
     const later = await cardGeometry(track);
     expect(later.map((card) => card.transform)).toEqual(initial.map((card) => card.transform));
-    for (const company of ["Company One", "Company Two", "Company Three"]) {
+    for (const company of ["网易互娱", "bilibili", "姚基金"]) {
       await expect(track.getByRole("heading", { name: company })).toBeVisible();
     }
   });
@@ -319,10 +319,9 @@ test("retains the existing Tabs below the desktop breakpoint", async ({ page }) 
   await section.scrollIntoViewIfNeeded();
   await expect(section.getByTestId("experience-track")).toBeHidden();
   await expect(section.getByRole("tab")).toHaveCount(3);
-  await section.getByRole("tab", { name: /Company Two/ }).click();
-  await expect(section.getByTestId("experience-mobile-panel")).toContainText("Role Two With a Longer Title");
-  await expect(section.getByTestId("experience-mobile-panel")).toContainText("20XX — 20XX");
-  await expect(section.getByTestId("experience-mobile-panel")).not.toContainText("Location Two");
+  await section.getByRole("tab", { name: /bilibili/ }).click();
+  await expect(section.getByTestId("experience-mobile-panel")).toContainText("赛事版权");
+  await expect(section.getByTestId("experience-mobile-panel")).toContainText("2026.5-2026.7");
 });
 
 test("allows direct navigation to Featured Work without changing the URL", async ({ page }) => {

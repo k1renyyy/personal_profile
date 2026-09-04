@@ -17,6 +17,7 @@ export function useGSAP<T extends HTMLElement = HTMLDivElement>(
     useEffect(() => {
         const element = scope.current;
         if (!element) return;
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
         const ctx = gsap.context(() => {
             runAnimation(element);

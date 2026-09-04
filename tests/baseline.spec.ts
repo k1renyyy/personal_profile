@@ -79,15 +79,29 @@ test("responsive themes and keyboard remain operational", async ({ page, browser
     await page.setViewportSize(viewport);
     await page.goto("/", { waitUntil: "load" });
     const html = page.locator("html");
-    const before = await html.getAttribute("class");
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(viewport.width);
     await page.getByRole("button", { name: /theme/i }).click();
-    await expect(html).not.toHaveAttribute("class", before ?? "");
+    const selectedTheme = await page.evaluate(() => localStorage.getItem("theme"));
+    await page.reload();
+    await expect(html).toHaveClass(selectedTheme === "dark" ? /dark/ : /^(?!.*dark)/);
   }
 
   expect(evidence.failures).toEqual([]);
   expect(evidence.driverDiagnostics).toEqual([]);
   expect(evidence.localNetworkFailures).toEqual([]);
   expect(evidence.supabaseRequests).toEqual([]);
+});
+
+test("theme starts light and persists only a manual choice", async ({ page, browserName }) => {
+  test.skip(browserName !== "chromium", "Theme persistence is verified once in pinned Chromium.");
+  await page.goto("/");
+  await page.evaluate(() => localStorage.removeItem("theme"));
+  await page.reload();
+  await expect(page.locator("html")).not.toHaveClass(/dark/);
+  await page.getByRole("button", { name: "Switch to dark theme" }).click();
+  expect(await page.evaluate(() => localStorage.getItem("theme"))).toBe("dark");
+  await page.reload();
+  await expect(page.locator("html")).toHaveClass(/dark/);
 });
 
 test("reduced motion, Shoot Mode, WebGL and testimonials remain operational", async ({ page, browserName }) => {
@@ -119,10 +133,10 @@ test("reduced motion, Shoot Mode, WebGL and testimonials remain operational", as
   expect(await page.evaluate(() => matchMedia("(prefers-reduced-motion: reduce)").matches)).toBe(true);
 
   const shootToggle = page.getByRole("button", { name: "Toggle shoot mode" });
-  await shootToggle.click();
+  await shootToggle.click({force: true});
   await expect(shootToggle).toHaveAttribute("aria-pressed", "true");
   await expect(page.locator("canvas")).toHaveCount(1);
-  await page.mouse.click(720, 300);
+  await page.mouse.click(100, 400);
   await expect(page.locator(".fixed.inset-0.z-9998 > div")).toHaveCount(1);
   expect(await page.evaluate(() => {
     const evidence = (window as unknown as Window & {
@@ -130,7 +144,7 @@ test("reduced motion, Shoot Mode, WebGL and testimonials remain operational", as
     }).__audioEvidence;
     return evidence.contexts > 0 && evidence.sourceStarts > 0;
   })).toBe(true);
-  await shootToggle.click();
+  await shootToggle.click({force: true});
 
   await expect(page.locator(".testimonials-section")).toBeVisible();
   await expect(page.locator(".achievements-section")).toHaveCount(0);

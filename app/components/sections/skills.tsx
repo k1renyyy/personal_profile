@@ -6,8 +6,9 @@ import {
   useMotionValue,
   useTransform,
   useAnimationFrame
-} from 'motion/react';
+} from "framer-motion";
 import '@/components/ScrollVelocity.css';
+import { useHydrationSafeReducedMotion } from "@/app/hooks/use-hydration-safe-reduced-motion";
 
 function useElementWidth<T extends HTMLElement>(ref: React.RefObject<T | null>): number {
   const [width, setWidth] = useState(0);
@@ -99,6 +100,7 @@ function VelocityText({
 }
 
 export default function Skills({ items }: {items: string[]}) {
+    const reduceMotion = useHydrationSafeReducedMotion();
     const sectionRef = useRef<HTMLElement>(null);
     const [isMobile, setIsMobile] = React.useState(false);
     const [marqueeActive, setMarqueeActive] = React.useState(true);
@@ -139,7 +141,7 @@ export default function Skills({ items }: {items: string[]}) {
                 <VelocityText
                     baseVelocity={isMobile ? 60 : 80}
                     isMobile={isMobile}
-                    paused={!marqueeActive}
+                    paused={!marqueeActive || !!reduceMotion}
                 >
                     {techStackString}
                 </VelocityText>
@@ -148,7 +150,7 @@ export default function Skills({ items }: {items: string[]}) {
                 <VelocityText
                     baseVelocity={isMobile ? -60 : -80}
                     isMobile={isMobile}
-                    paused={!marqueeActive}
+                    paused={!marqueeActive || !!reduceMotion}
                 >
                     {techStackString}
                 </VelocityText>

@@ -31,9 +31,15 @@ function fixture() {
       testimonialsIntro: "Testimonials",
     },
     capabilityGroups: [{_id: "group-1", name: "Product", items: ["Research"], order: 0}],
-    experiences: [{_id: "experience-1", company: "Company", role: "Product Manager", timeLabel: "2026.01 — PRESENT", outcomes: ["Outcome"], order: 0}],
-    projects: [{_id: "project-1", name: "Agent", projectType: "AI Product", role: "Product Lead", summary: "Summary", outcomes: ["Outcome"], capabilities: ["Research"], order: 0}],
-    testimonials: [],
+    experiences: Array.from({length: 3}, (_, index) => ({_id: `experience-${index}`, company: `Company ${index}`, role: "Product Manager", timeLabel: "2026.01 — PRESENT", outcomes: ["Outcome"], order: index})),
+    projects: Array.from({length: 3}, (_, index) => ({_id: `project-${index}`, name: `Agent ${index}`, projectType: "AI Product", role: "Product Lead", summary: "Summary", outcomes: ["Outcome"], capabilities: ["Research"], order: index})),
+    testimonials: Array.from({length: 6}, (_, index) => ({
+      _id: `testimonial-${index}`,
+      personName: `Person ${index}`,
+      company: "Company",
+      quote: "Approved quote",
+      order: index,
+    })),
   };
 }
 
@@ -43,7 +49,7 @@ describe("validateAndMapHomepage", () => {
     expect(result.experiences[0].dateRange).toBe("2026.01 — PRESENT");
     expect(result.projects.items[0]).not.toHaveProperty("year");
     expect(result.projects.items[0].capabilities).toEqual(["Research"]);
-    expect(result.testimonials.items).toEqual([]);
+    expect(result.testimonials.items).toHaveLength(6);
     expect(result.about.photos).toHaveLength(3);
   });
 
@@ -53,15 +59,15 @@ describe("validateAndMapHomepage", () => {
     expect(() => validateAndMapHomepage(content)).toThrow("homepage must be published");
   });
 
-  it("rejects more projects than the confirmed selector layout supports", () => {
+  it("rejects a project count that differs from the confirmed homepage", () => {
     const content = fixture();
     content.projects = Array.from({length: 5}, (_, index) => ({...content.projects[0], _id: `project-${index}`, order: index}));
-    expect(() => validateAndMapHomepage(content)).toThrow("projects must contain 1-4 items");
+    expect(() => validateAndMapHomepage(content)).toThrow("projects must contain 3-3 items");
   });
 
   it("rejects duplicate ordering", () => {
     const content = fixture();
-    content.experiences.push({...content.experiences[0], _id: "experience-2"});
+    content.experiences[1].order = 0;
     expect(() => validateAndMapHomepage(content)).toThrow("experiences order values must be unique");
   });
 

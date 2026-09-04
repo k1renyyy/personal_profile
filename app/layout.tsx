@@ -4,7 +4,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "./components/smooth-scroll";
-import PageTransition from "./components/page-transition";
 import FloatingShootToggleHost from "./components/floating-shoot-toggle-host";
 import {buildIdentityMetadata} from "@/lib/identity/build-metadata";
 import {getIdentityViewModel} from "@/lib/identity/get-identity";
@@ -36,9 +35,7 @@ export default async function RootLayout({
       >
         <ThemeProvider>
           <FloatingShootToggleHost />
-          <SmoothScroll>
-            <PageTransition>{children}</PageTransition>
-          </SmoothScroll>
+          <SmoothScroll>{children}</SmoothScroll>
         </ThemeProvider>
       </body>
     </html>

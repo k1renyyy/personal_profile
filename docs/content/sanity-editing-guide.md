@@ -11,7 +11,7 @@ Sanity 管理当前首页的文案、条目、排序、可见状态和发布状�
 - 首页内切换，不跳转。
 - 不显示 Year。
 - Capabilities 固定在内容框底部。
-- 最多发布 4 个可见项目。
+- 首页固定读取 3 个可见项目。
 
 Experience 只显示公司、职位、时间和成果；不显示 location。最多发布 3 条可见经历，每条最多 4 项成果。
 
@@ -34,23 +34,21 @@ npm ci
 npm run dev
 ```
 
-登录有该 Sanity 项目编辑权限的账号后，可在中文导航中编辑首页、工作经历、能力分组、项目和 Testimonials。
+登录有该 Sanity 项目编辑权限的账号后，可在中文导航中编辑首页、工作经历、项目和 Testimonials。
 
 ## 内容就绪顺序
 
 1. 完成并发布单例文档：站点设置、个人资料、首页内容。
 2. 完成并发布 1–3 条可见 Experience。
-3. 完成并发布 1–6 个可见能力分组。
-4. 完成并发布 1–4 个可见 Project。
-5. 确保 Email、GitHub 和 LinkedIn 已发布且顺序唯一。
-6. Testimonials 可以为空；不得用未授权推荐语填充。
+3. 完成并发布 3 个可见 Project，排序值必须唯一。
+4. 确保 Email、GitHub 和 LinkedIn 已发布且顺序唯一。
+5. Testimonials 仅发布已取得公开授权的内容。
 
-## 切换网站内容源
+## 网站构建
 
 只在上述必需内容都已发布后，在网站构建环境配置：
 
 ```text
-CONTENT_SOURCE=sanity
 SANITY_PROJECT_ID=foow59ov
 SANITY_DATASET=production
 ```

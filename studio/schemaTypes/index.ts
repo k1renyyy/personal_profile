@@ -1,6 +1,4 @@
 import {blockContent} from './blockContent'
-import {capabilityGroup} from './capabilityGroup'
-import {education} from './education'
 import {experience} from './experience'
 import {homepage} from './homepage'
 import {mediaRecord} from './mediaRecord'
@@ -15,9 +13,7 @@ export const schemaTypes = [
   siteSettings,
   profile,
   homepage,
-  education,
   experience,
-  capabilityGroup,
   project,
   testimonial,
   socialLink,

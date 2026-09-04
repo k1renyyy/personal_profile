@@ -420,30 +420,30 @@ function DesktopExperienceCards({ experiences, title, label }: {experiences: Exp
               <article
                 data-testid="experience-card-back"
                 aria-labelledby={`experience-card-title-${index}`}
-                className="absolute inset-0 overflow-hidden rounded-[2rem] border bg-[#fafbf9] p-[clamp(1.25rem,2vw,2.5rem)] text-[#171512] [backface-visibility:hidden] [transform:rotateY(180deg)]"
+                className="absolute inset-0 overflow-hidden rounded-[2rem] border bg-[#fafbf9] p-[clamp(1.25rem,2vw,2.5rem)] text-[#171512] dark:bg-[#171512] dark:text-[#f5f1e8] [backface-visibility:hidden] [transform:rotateY(180deg)]"
                 style={{ borderColor: experience.color }}
               >
                     <div className="absolute inset-x-0 top-0 h-1.5" style={{ backgroundColor: experience.color }} aria-hidden="true" />
                     <div data-card-back-content>
-                      <div className="flex items-start justify-between gap-5 border-b border-[#171512]/15 pb-[clamp(1rem,2vh,1.5rem)]">
+                      <div className="flex items-start justify-between gap-5 border-b border-current/15 pb-[clamp(1rem,2vh,1.5rem)]">
                         <div>
-                          <span className="font-mono text-xs tracking-[0.24em] text-[#171512]/45">{String(index + 1).padStart(2, "0")}</span>
+                          <span className="font-mono text-xs tracking-[0.24em] opacity-45">{String(index + 1).padStart(2, "0")}</span>
                           <h3 id={`experience-card-title-${index}`} className="mt-3 text-[clamp(1.75rem,2.5vw,3rem)] font-black leading-none tracking-tight">
                             {experience.company}
                           </h3>
                         </div>
                         <span className="mt-1 size-4 shrink-0" style={{ backgroundColor: experience.color }} aria-hidden="true" />
                       </div>
-                      <p className="mt-[clamp(1rem,2vh,1.5rem)] font-mono text-[10px] uppercase leading-5 tracking-[0.13em] text-[#171512]/55 xl:text-xs">
+                      <p className="mt-[clamp(1rem,2vh,1.5rem)] font-mono text-[10px] uppercase leading-5 tracking-[0.13em] opacity-55 xl:text-xs">
                         {experience.role} · {experience.dateRange}
                       </p>
-                      <ol className="mt-[clamp(1rem,2vh,1.75rem)] border-t border-[#171512]/15">
+                      <ol className="mt-[clamp(1rem,2vh,1.75rem)] border-t border-current/15">
                         {experience.highlights.map((highlight, highlightIndex) => (
-                          <li key={`${experience.id}-${highlightIndex}`} className="grid grid-cols-[2rem_minmax(0,1fr)] gap-3 border-b border-[#171512]/15 py-[clamp(0.65rem,1.5vh,1rem)] last:border-b-0 xl:grid-cols-[2.5rem_minmax(0,1fr)] xl:gap-4">
-                            <span aria-hidden="true" className="font-mono text-xs tracking-[0.18em] text-[#171512]/40">
+                          <li key={`${experience.id}-${highlightIndex}`} className="grid grid-cols-[2rem_minmax(0,1fr)] gap-3 border-b border-current/15 py-[clamp(0.65rem,1.5vh,1rem)] last:border-b-0 xl:grid-cols-[2.5rem_minmax(0,1fr)] xl:gap-4">
+                            <span aria-hidden="true" className="font-mono text-xs tracking-[0.18em] opacity-40">
                               {String(highlightIndex + 1).padStart(2, "0")}
                             </span>
-                            <p className="text-xs leading-5 text-[#171512]/75 xl:text-sm xl:leading-6">{highlight}</p>
+                            <p className="text-xs leading-5 opacity-75 xl:text-sm xl:leading-6">{highlight}</p>
                           </li>
                         ))}
                       </ol>

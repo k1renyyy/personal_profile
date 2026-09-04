@@ -1,59 +1,12 @@
-export type ContentSource = "repository" | "sanity-poc" | "sanity";
-
 export type SanityQueryClient = {
-  fetch<T>(query: string, params?: Record<string, unknown>): Promise<T>;
+  fetch<T>(
+    query: string,
+    params?: Record<string, unknown>,
+    options?: {cache?: RequestCache; tag?: string},
+  ): Promise<T>;
 };
 
 export type PortableTextBlock = Record<string, unknown>;
-
-export type SiteSettingsContent = {
-  _id: string;
-  siteTitle: string;
-  description: string;
-  canonicalUrl: string;
-  allowIndexing: boolean;
-  socialName: string;
-  defaultShareImage: string;
-};
-
-export type ProfileContent = {
-  _id: string;
-  name: string;
-  professionalTitle: string;
-  locations: string[];
-  shortBiography: string;
-  biography: PortableTextBlock[];
-  portrait: string;
-};
-
-export type ProjectContent = {
-  _id: string;
-  name: string;
-  role: string;
-  year: string;
-  summary: string;
-  description: PortableTextBlock[];
-  highlights: string[];
-  order: number;
-  isPublished: boolean;
-};
-
-export type MediaRecordContent = {
-  _id: string;
-  label: string;
-  alt: string;
-  source: string;
-  rightsStatus: "owned" | "licensed" | "permission-granted";
-  placements: string[];
-  assetUrl: string;
-};
-
-export type PortfolioContent = {
-  siteSettings: SiteSettingsContent;
-  profile: ProfileContent;
-  projects: ProjectContent[];
-  mediaRecords: MediaRecordContent[];
-};
 
 export type ProductionMediaContent = {
   _id: string;
@@ -111,7 +64,6 @@ export type HomepageContent = {
   skillTickerItems: string[];
   experienceTitle: string;
   experienceLabel: string;
-  experienceIntro: string;
   projectsTitle: string;
   projectsLabel: string;
   projectsIntro: string;
@@ -121,36 +73,12 @@ export type HomepageContent = {
   contactInvitation: string;
 };
 
-export type EducationContent = {
-  _id: string;
-  institution: string;
-  degree: string;
-  fieldOfStudy: string;
-  location: string;
-  startDate: string;
-  endDate: string;
-  isExpected: boolean;
-  description?: string;
-  highlights: string[];
-  relatedUrl?: string;
-  order: number;
-  isVisible: boolean;
-};
-
 export type ExperienceContent = {
   _id: string;
   company: string;
   role: string;
   timeLabel: string;
   outcomes: string[];
-  order: number;
-  isVisible: boolean;
-};
-
-export type CapabilityGroupContent = {
-  _id: string;
-  name: string;
-  items: string[];
   order: number;
   isVisible: boolean;
 };
@@ -192,19 +120,10 @@ export type SocialLinkContent = {
   isVisible: boolean;
 };
 
-export type ProductionContentSnapshot = {
+export type DomainContentMap = {
   siteSettings: ProductionSiteSettingsContent;
   profile: ProductionProfileContent;
-  homepage: HomepageContent;
-  educations: EducationContent[];
-  experiences: ExperienceContent[];
-  capabilityGroups: CapabilityGroupContent[];
-  projects: ProductionProjectContent[];
-  testimonials: TestimonialContent[];
   socialLinks: SocialLinkContent[];
-  mediaRecords: ProductionMediaContent[];
 };
 
-export type ContentDomain = keyof ProductionContentSnapshot;
-
-export type DomainContentMap = ProductionContentSnapshot;
+export type ContentDomain = keyof DomainContentMap;

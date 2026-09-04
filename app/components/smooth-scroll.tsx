@@ -1,11 +1,9 @@
 "use client";
 
 import Lenis from "@studio-freight/lenis";
-import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { logProjectsScroll } from "@/app/utils/projects-scroll-debug";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -42,12 +40,10 @@ interface SmoothScrollProps {
 }
 
 export default function SmoothScroll({ children }: SmoothScrollProps) {
-  const pathname = usePathname();
-
   useEffect(() => {
     document.documentElement.style.overflowY = "auto";
 
-    const useLenis = shouldUseLenis() && pathname !== "/projects";
+    const useLenis = shouldUseLenis();
 
     if (!useLenis) {
       return () => {
@@ -97,26 +93,7 @@ export default function SmoothScroll({ children }: SmoothScrollProps) {
       document.documentElement.style.overflowY = "";
       ScrollTrigger.refresh();
     };
-  }, [pathname]);
-
-  useEffect(() => {
-    const win = getWindowWithLenis();
-    const lenis = win.lenis;
-    logProjectsScroll("SmoothScroll pathname change", {
-      pathname,
-      lenisInstance: Boolean(lenis),
-      shouldUseLenis: shouldUseLenis(),
-      nativeScrollOnProjectsList: pathname === "/projects",
-    });
-    if (!lenis) return;
-
-    const id = window.requestAnimationFrame(() => {
-      lenis.resize();
-      ScrollTrigger.refresh();
-    });
-
-    return () => window.cancelAnimationFrame(id);
-  }, [pathname]);
+  }, []);
 
   return children;
 }

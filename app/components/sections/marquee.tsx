@@ -23,7 +23,8 @@ export default function Marquee({ content }: MarqueeProps) {
     const mobileRow2Ref = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        if (!sectionRef.current) return;
+        const section = sectionRef.current;
+        if (!section) return;
 
         const ctx = gsap.context(() => {
             const mm = gsap.matchMedia();
@@ -31,7 +32,7 @@ export default function Marquee({ content }: MarqueeProps) {
             mm.add("(max-width: 767px)", () => {
                 const row1 = mobileRow1Ref.current;
                 const row2 = mobileRow2Ref.current;
-                const trigger = sectionRef.current;
+                const trigger = section;
                 if (row1 || row2) {
                     const tl = gsap.timeline({
                         scrollTrigger: {
@@ -59,7 +60,7 @@ export default function Marquee({ content }: MarqueeProps) {
 
                 const tl = gsap.timeline({
                     scrollTrigger: {
-                        trigger: sectionRef.current,
+                            trigger: section,
                         start: "top bottom",
                         end: "bottom top",
                         scrub: 0.16,
@@ -85,7 +86,7 @@ export default function Marquee({ content }: MarqueeProps) {
                     tl.scrollTrigger?.kill();
                 };
             });
-        }, sectionRef);
+        }, section);
 
         return () => ctx.revert();
     }, []);
