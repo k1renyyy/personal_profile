@@ -118,50 +118,19 @@ function MobileExperienceTabs({ experiences }: {experiences: ExperienceItem[]}) 
   );
 }
 
-function ExperienceCardArtwork({ item, index }: { item: ExperienceItem; index: number }) {
-  const dotsId = `experience-dots-${index}`;
-  const linesId = `experience-lines-${index}`;
-  const stripesId = `experience-stripes-${index}`;
+function ExperienceCardArtwork({ item }: { item: ExperienceItem }) {
+  const artwork = item.company.includes("网易") ? "velocity" : item.company.includes("姚") ? "bridge" : "frame";
 
   return (
-    <svg data-testid="experience-card-artwork" data-artwork={`wordmark-${index + 1}`} viewBox="0 0 320 454" className="size-full" aria-hidden="true">
-      <defs>
-        <pattern id={dotsId} width="16" height="16" patternUnits="userSpaceOnUse">
-          <circle cx="4" cy="4" r="3.5" fill="#f3f6fa" />
-        </pattern>
-        <pattern id={linesId} width="11" height="11" patternUnits="userSpaceOnUse">
-          <path d="M2 0v11" stroke="#f3f6fa" strokeWidth="3" />
-        </pattern>
-        <pattern id={stripesId} width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-          <path d="M3 0v14" stroke="#f3f6fa" strokeWidth="6" />
-        </pattern>
-      </defs>
-
-      {index === 0 ? (
-        <g fontFamily="Alibaba PuHuiTi, sans-serif" fontSize="126" fontWeight="900">
-          <text x="24" y="145" fill={`url(#${dotsId})`}>网</text>
-          <text x="166" y="145" fill={`url(#${linesId})`}>易</text>
-          <text x="24" y="303" fill={`url(#${stripesId})`}>互</text>
-          <text x="166" y="303" fill="#f3f6fa">娱</text>
-        </g>
-      ) : index === 1 ? (
-        <g fontFamily="Geist, sans-serif" fontWeight="900" letterSpacing="-10">
-          <text x="18" y="205" fontSize="118" textLength="285" lengthAdjust="spacingAndGlyphs" fill={`url(#${stripesId})`}>bilibili</text>
-          <text x="18" y="320" fontSize="86" textLength="285" lengthAdjust="spacingAndGlyphs" fill="none" stroke="#f3f6fa" strokeWidth="2">bilibili</text>
-        </g>
-      ) : (
-        <g fontFamily="Alibaba PuHuiTi, sans-serif" fontWeight="900">
-          <text x="8" y="292" fontSize="246" fill={`url(#${linesId})`}>姚</text>
-          <text x="216" y="185" fontSize="92" fill="#f3f6fa">基</text>
-          <text x="216" y="294" fontSize="92" fill="#f3f6fa">金</text>
-        </g>
-      )}
-
-      <text x="24" y="416" fill="#f3f6fa" fontFamily="Geist Mono, monospace" fontSize="9" letterSpacing="2.4">
-        {index + 1}. {item.company}
-      </text>
-      <path d="M24 430h272" stroke="#f3f6fa" strokeWidth="1" />
-    </svg>
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={`/experience/${artwork}.webp`}
+      alt=""
+      data-testid="experience-card-artwork"
+      data-artwork={artwork}
+      className="size-full object-contain"
+      aria-hidden="true"
+    />
   );
 }
 
@@ -406,9 +375,9 @@ function DesktopExperienceCards({ experiences, title, label }: {experiences: Exp
               <div
                 data-testid="experience-card-front"
                 aria-hidden="true"
-                className="absolute inset-0 overflow-hidden rounded-[2rem] border border-[#5d9fe8]/35 bg-[linear-gradient(180deg,#0a55c4_0%,#083c7c_42%,#091b32_100%)] [backface-visibility:hidden]"
+                className="absolute inset-0 overflow-hidden rounded-[2rem] border border-black/15 bg-[#f4f0e7] [backface-visibility:hidden]"
               >
-                <ExperienceCardArtwork item={experience} index={index} />
+                <ExperienceCardArtwork item={experience} />
                 <span data-front-overlay data-testid="experience-card-front-overlay" className="absolute inset-0 bg-background" />
               </div>
 
