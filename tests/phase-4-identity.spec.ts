@@ -42,23 +42,16 @@ const evidenceViewports = [
 ] as const;
 
 for (const viewport of evidenceViewports) {
-  for (const theme of ["light", "dark"] as const) {
-    test(`captures ${viewport.name} ${theme} identity evidence`, async ({page}, testInfo) => {
+    test(`captures ${viewport.name} dark identity evidence`, async ({page}, testInfo) => {
       test.skip(testInfo.project.name !== "chromium", "Deterministic visual evidence uses Chromium");
       await page.setViewportSize({width: viewport.width, height: viewport.height});
-      await page.addInitScript((selectedTheme) => localStorage.setItem("theme", selectedTheme), theme);
       await page.goto("/");
-      if (theme === "dark") {
-        await expect(page.locator("html")).toHaveClass(/dark/);
-      } else {
-        await expect(page.locator("html")).not.toHaveClass(/dark/);
-      }
+      await expect(page.locator("html")).toHaveClass(/dark/);
       expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(viewport.width);
       await page.screenshot({
-        path: testInfo.outputPath(`home-${viewport.name}-${theme}.png`),
+        path: testInfo.outputPath(`home-${viewport.name}-dark.png`),
         fullPage: true,
         animations: "disabled",
       });
     });
-  }
 }

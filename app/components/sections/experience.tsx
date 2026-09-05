@@ -19,11 +19,8 @@ export type ExperienceContentItem = {
 };
 
 type ExperienceItem = ExperienceContentItem & {
-  color: string;
   logo?: { src: string };
 };
-
-const experienceColors = ["#191918", "#222220", "#2b2a27"];
 
 function ExperienceLogo({ item }: { item: ExperienceItem }) {
   const [failed, setFailed] = React.useState(false);
@@ -121,50 +118,49 @@ function MobileExperienceTabs({ experiences }: {experiences: ExperienceItem[]}) 
   );
 }
 
-function ExperienceCardArtwork({ index }: { index: number }) {
-  if (index === 0) {
-    return (
-      <svg data-testid="experience-card-artwork" data-artwork="curved" viewBox="0 0 320 454" className="size-full" aria-hidden="true">
-        <path d="M62 270a98 98 0 0 1 156-80" fill="none" stroke="#f1ede5" strokeWidth="28" strokeLinecap="round" />
-        <path d="M95 305a58 58 0 0 0 92 18" fill="none" stroke="#aaa59d" strokeWidth="13" strokeLinecap="round" />
-        <circle cx="221" cy="177" r="23" fill="#f1ede5" />
-        <circle cx="88" cy="309" r="9" fill="#f1ede5" />
-        <path d="M88 309 221 177" stroke="#aaa59d" strokeWidth="2" strokeDasharray="5 8" />
-        <g data-testid="experience-card-corner-mark" transform="translate(258 36)">
-          <path d="M0 22A22 22 0 0 1 22 0" fill="none" stroke="#f1ede5" strokeWidth="7" />
-          <circle cx="24" cy="24" r="4" fill="#aaa59d" />
-        </g>
-      </svg>
-    );
-  }
-
-  if (index === 1) {
-    return (
-      <svg data-testid="experience-card-artwork" data-artwork="orthogonal" viewBox="0 0 320 454" className="size-full" aria-hidden="true">
-        <rect x="70" y="142" width="54" height="172" rx="4" fill="#f1ede5" />
-        <rect x="196" y="110" width="54" height="172" rx="4" fill="#aaa59d" />
-        <rect x="112" y="205" width="96" height="38" rx="3" fill="#f1ede5" />
-        <rect x="150" y="181" width="20" height="20" fill="#222220" stroke="#f1ede5" strokeWidth="3" />
-        <path d="M97 330V350H223V300" fill="none" stroke="#aaa59d" strokeWidth="2" strokeDasharray="5 8" />
-        <g data-testid="experience-card-corner-mark" transform="translate(258 34)">
-          <rect width="18" height="18" fill="#f1ede5" />
-          <rect x="12" y="14" width="18" height="18" fill="#aaa59d" />
-        </g>
-      </svg>
-    );
-  }
+function ExperienceCardArtwork({ item, index }: { item: ExperienceItem; index: number }) {
+  const dotsId = `experience-dots-${index}`;
+  const linesId = `experience-lines-${index}`;
+  const stripesId = `experience-stripes-${index}`;
 
   return (
-    <svg data-testid="experience-card-artwork" data-artwork="diagonal" viewBox="0 0 320 454" className="size-full" aria-hidden="true">
-      <path d="m68 304 74-118 50 42 62-104" fill="none" stroke="#f1ede5" strokeWidth="24" strokeLinecap="square" strokeLinejoin="miter" />
-      <path d="M66 348h188V106" fill="none" stroke="#aaa59d" strokeWidth="2" strokeDasharray="6 9" />
-      <circle cx="68" cy="304" r="12" fill="#aaa59d" />
-      <circle cx="142" cy="186" r="12" fill="#f1ede5" />
-      <circle cx="192" cy="228" r="12" fill="#aaa59d" />
-      <g data-testid="experience-card-corner-mark" transform="translate(256 34)">
-        <path d="M2 28 15 4l13 10" fill="none" stroke="#f1ede5" strokeWidth="6" strokeLinecap="square" />
-        <circle cx="28" cy="14" r="5" fill="#aaa59d" />
-      </g>
+    <svg data-testid="experience-card-artwork" data-artwork={`wordmark-${index + 1}`} viewBox="0 0 320 454" className="size-full" aria-hidden="true">
+      <defs>
+        <pattern id={dotsId} width="16" height="16" patternUnits="userSpaceOnUse">
+          <circle cx="4" cy="4" r="3.5" fill="#f3f6fa" />
+        </pattern>
+        <pattern id={linesId} width="11" height="11" patternUnits="userSpaceOnUse">
+          <path d="M2 0v11" stroke="#f3f6fa" strokeWidth="3" />
+        </pattern>
+        <pattern id={stripesId} width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+          <path d="M3 0v14" stroke="#f3f6fa" strokeWidth="6" />
+        </pattern>
+      </defs>
+
+      {index === 0 ? (
+        <g fontFamily="Alibaba PuHuiTi, sans-serif" fontSize="126" fontWeight="900">
+          <text x="24" y="145" fill={`url(#${dotsId})`}>网</text>
+          <text x="166" y="145" fill={`url(#${linesId})`}>易</text>
+          <text x="24" y="303" fill={`url(#${stripesId})`}>互</text>
+          <text x="166" y="303" fill="#f3f6fa">娱</text>
+        </g>
+      ) : index === 1 ? (
+        <g fontFamily="Geist, sans-serif" fontWeight="900" letterSpacing="-10">
+          <text x="18" y="205" fontSize="118" textLength="285" lengthAdjust="spacingAndGlyphs" fill={`url(#${stripesId})`}>bilibili</text>
+          <text x="18" y="320" fontSize="86" textLength="285" lengthAdjust="spacingAndGlyphs" fill="none" stroke="#f3f6fa" strokeWidth="2">bilibili</text>
+        </g>
+      ) : (
+        <g fontFamily="Alibaba PuHuiTi, sans-serif" fontWeight="900">
+          <text x="8" y="292" fontSize="246" fill={`url(#${linesId})`}>姚</text>
+          <text x="216" y="185" fontSize="92" fill="#f3f6fa">基</text>
+          <text x="216" y="294" fontSize="92" fill="#f3f6fa">金</text>
+        </g>
+      )}
+
+      <text x="24" y="416" fill="#f3f6fa" fontFamily="Geist Mono, monospace" fontSize="9" letterSpacing="2.4">
+        {index + 1}. {item.company}
+      </text>
+      <path d="M24 430h272" stroke="#f3f6fa" strokeWidth="1" />
     </svg>
   );
 }
@@ -410,10 +406,9 @@ function DesktopExperienceCards({ experiences, title, label }: {experiences: Exp
               <div
                 data-testid="experience-card-front"
                 aria-hidden="true"
-                className="absolute inset-0 overflow-hidden rounded-[2rem] border border-black/5 [backface-visibility:hidden]"
-                style={{ backgroundColor: experience.color }}
+                className="absolute inset-0 overflow-hidden rounded-[2rem] border border-[#7ea6d6]/25 bg-[linear-gradient(180deg,rgba(32,59,96,0.92)_0%,rgba(21,36,58,0.96)_42%,rgba(16,25,37,0.98)_100%)] [backface-visibility:hidden]"
               >
-                <ExperienceCardArtwork index={index} />
+                <ExperienceCardArtwork item={experience} index={index} />
                 <span data-front-overlay data-testid="experience-card-front-overlay" className="absolute inset-0 bg-background" />
               </div>
 
@@ -457,10 +452,7 @@ function DesktopExperienceCards({ experiences, title, label }: {experiences: Exp
 }
 
 export default function Experience({ items, title, label }: {items: ExperienceContentItem[]; title: string; label: string}) {
-  const experiences = items.map((item, index) => ({
-    ...item,
-    color: experienceColors[index] ?? experienceColors[experienceColors.length - 1],
-  }));
+  const experiences = items;
 
   return (
     <section data-testid="experience-section" aria-label="Experience 工作经历" className="relative bg-transparent pt-16 sm:pt-20 lg:pt-24">

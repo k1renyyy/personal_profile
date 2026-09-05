@@ -65,7 +65,7 @@ test("all generated routes render without browser or Supabase failures", async (
   }
 });
 
-test("responsive themes and keyboard remain operational", async ({ page, browserName }) => {
+test("responsive dark theme remains operational", async ({ page, browserName }) => {
   test.skip(browserName !== "chromium", "The full viewport matrix uses pinned Chromium.");
   const evidence = collectBrowserFailures(page);
   const viewports = [
@@ -80,12 +80,9 @@ test("responsive themes and keyboard remain operational", async ({ page, browser
   for (const viewport of viewports) {
     await page.setViewportSize(viewport);
     await page.goto("/", { waitUntil: "load" });
-    const html = page.locator("html");
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(viewport.width);
-    await page.getByRole("button", { name: /theme/i }).click();
-    const selectedTheme = await page.evaluate(() => localStorage.getItem("theme"));
-    await page.reload();
-    await expect(html).toHaveClass(selectedTheme === "dark" ? /dark/ : /^(?!.*dark)/);
+    await expect(page.locator("html")).toHaveClass(/dark/);
+    await expect(page.getByRole("button", { name: /theme/i })).toHaveCount(0);
   }
 
   expect(evidence.failures).toEqual([]);
@@ -96,16 +93,12 @@ test("responsive themes and keyboard remain operational", async ({ page, browser
   expect(evidence.supabaseRequests).toEqual([]);
 });
 
-test("theme starts dark and persists only a manual choice", async ({ page, browserName }) => {
-  test.skip(browserName !== "chromium", "Theme persistence is verified once in pinned Chromium.");
+test("theme remains dark regardless of a stale light preference", async ({ page, browserName }) => {
+  test.skip(browserName !== "chromium", "The fixed theme is verified once in pinned Chromium.");
+  await page.addInitScript(() => localStorage.setItem("theme", "light"));
   await page.goto("/");
-  await page.evaluate(() => localStorage.removeItem("theme"));
-  await page.reload();
   await expect(page.locator("html")).toHaveClass(/dark/);
-  await page.getByRole("button", { name: "Switch to light theme" }).click();
-  expect(await page.evaluate(() => localStorage.getItem("theme"))).toBe("light");
-  await page.reload();
-  await expect(page.locator("html")).not.toHaveClass(/dark/);
+  await expect(page.getByRole("button", { name: /theme/i })).toHaveCount(0);
 });
 
 test("reduced motion, Shoot Mode, WebGL and testimonials remain operational", async ({ page, browserName }) => {

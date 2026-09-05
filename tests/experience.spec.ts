@@ -50,7 +50,7 @@ function firstCardKeyframeProgress(localProgress: number) {
 test.describe("Experience desktop three-column flip", () => {
   test.skip(({ browserName }) => browserName !== "chromium", "Geometry assertions use Chromium rendering.");
 
-  test("reveals the heading and three distinct near-black fronts during the entrance", async ({ page }) => {
+  test("reveals the heading and three deep-blue company wordmarks during the entrance", async ({ page }) => {
     const { track, stage } = await openDesktopExperience(page);
     await expect(track.getByTestId("experience-card-front-overlay")).toHaveCount(3);
     const covered = await track.getByTestId("experience-card-front-overlay").evaluateAll((overlays) => overlays.map((overlay) => Number(getComputedStyle(overlay).opacity)));
@@ -61,14 +61,13 @@ test.describe("Experience desktop three-column flip", () => {
     await expect(stage.getByText("工作经历", { exact: true })).toBeVisible();
     await expect(track.getByTestId("experience-card")).toHaveCount(3);
     await expect(track.getByTestId("experience-card-artwork")).toHaveCount(3);
-    await expect(track.getByTestId("experience-card-corner-mark")).toHaveCount(3);
     const revealed = await track.getByTestId("experience-card-front-overlay").evaluateAll((overlays) => overlays.map((overlay) => Number(getComputedStyle(overlay).opacity)));
     expect(revealed.every((opacity) => opacity < 0.05)).toBe(true);
-    const colors = await track.getByTestId("experience-card-front").evaluateAll((fronts) => fronts.map((front) => getComputedStyle(front).backgroundColor));
-    expect(colors).toEqual(["rgb(25, 25, 24)", "rgb(34, 34, 32)", "rgb(43, 42, 39)"]);
-    await expect(track.getByTestId("experience-card-artwork").nth(0)).toHaveAttribute("data-artwork", "curved");
-    await expect(track.getByTestId("experience-card-artwork").nth(1)).toHaveAttribute("data-artwork", "orthogonal");
-    await expect(track.getByTestId("experience-card-artwork").nth(2)).toHaveAttribute("data-artwork", "diagonal");
+    const backgrounds = await track.getByTestId("experience-card-front").evaluateAll((fronts) => fronts.map((front) => getComputedStyle(front).backgroundImage));
+    expect(backgrounds.every((background) => background.includes("rgba(32, 59, 96, 0.92)") && background.includes("rgba(16, 25, 37, 0.98)"))).toBe(true);
+    await expect(track.getByTestId("experience-card-artwork").nth(0)).toHaveAttribute("data-artwork", "wordmark-1");
+    await expect(track.getByTestId("experience-card-artwork").nth(1)).toHaveAttribute("data-artwork", "wordmark-2");
+    await expect(track.getByTestId("experience-card-artwork").nth(2)).toHaveAttribute("data-artwork", "wordmark-3");
   });
 
   test("uses a 350vh scrubbed track with no scroll lock", async ({ page }) => {
