@@ -19,10 +19,10 @@ type TestimonialsProps = {
 };
 
 const testimonialAvatars: Record<string, string> = {
-    "栾兴良": "https://api.dicebear.com/9.x/personas/svg?seed=luan-xingliang&hair=shortCombover&eyes=glasses&nose=mediumRound&mouth=smile&skinColor=e5a07e&hairColor=362c47&clothingColor=456dff&facialHairProbability=0",
-    "陈志鹏": "https://api.dicebear.com/9.x/personas/svg?seed=chen-zhipeng&hair=fade&eyes=happy&nose=smallRound&mouth=bigSmile&skinColor=b16a5b&hairColor=362c47&clothingColor=6dbb58&facialHairProbability=0",
-    "叶大伟": "https://api.dicebear.com/9.x/personas/svg?seed=ye-dawei&hair=shortCombover&eyes=glasses&nose=wrinkles&mouth=smile&skinColor=e5a07e&hairColor=362c47&clothingColor=54d7c7&facialHairProbability=0",
-    "Gina Antoniello": "https://api.dicebear.com/9.x/personas/svg?seed=gina-antoniello&hair=extraLong&eyes=open&nose=smallRound&mouth=lips&skinColor=e7a391&hairColor=6c4545&clothingColor=f3b63a&facialHairProbability=0",
+    "栾兴良": "https://api.dicebear.com/10.x/lorelei/svg?seed=luan-xingliang&hairVariant=variant03&glassesProbability=100&glassesVariant=variant01&mouthVariant=happy09&hairColor=2c1b18&skinColor=e5a07e&backgroundColor=ffffff",
+    "陈志鹏": "https://api.dicebear.com/10.x/lorelei/svg?seed=chen-zhipeng&hairVariant=variant04&glassesProbability=0&mouthVariant=happy12&hairColor=2c1b18&skinColor=d78774&backgroundColor=ffffff",
+    "叶大伟": "https://api.dicebear.com/10.x/lorelei/svg?seed=ye-dawei&hairVariant=variant02&glassesProbability=100&glassesVariant=variant04&mouthVariant=happy09&hairColor=2c1b18&skinColor=e5a07e&backgroundColor=ffffff",
+    "Gina Antoniello": "https://api.dicebear.com/10.x/lorelei/svg?seed=gina-antoniello&hairVariant=variant45&glassesProbability=0&mouthVariant=happy02&hairColor=6c4545&skinColor=e7a391&backgroundColor=ffffff",
 };
 
 export default function Testimonials({ content }: TestimonialsProps) {
