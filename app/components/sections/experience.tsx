@@ -420,10 +420,9 @@ function DesktopExperienceCards({ experiences, title, label }: {experiences: Exp
               <article
                 data-testid="experience-card-back"
                 aria-labelledby={`experience-card-title-${index}`}
-                className="absolute inset-0 overflow-hidden rounded-[2rem] border bg-[#fafbf9] p-[clamp(1.25rem,2vw,2.5rem)] text-[#171512] dark:bg-[#171512] dark:text-[#f5f1e8] [backface-visibility:hidden] [transform:rotateY(180deg)]"
-                style={{ borderColor: experience.color }}
+                className="absolute inset-0 overflow-hidden rounded-[2rem] border border-black/10 bg-[#fafbf9] p-[clamp(1.25rem,2vw,2.5rem)] text-[#171512] dark:border-[#7ea6d6]/25 dark:bg-[linear-gradient(180deg,rgba(32,59,96,0.92)_0%,rgba(21,36,58,0.96)_42%,rgba(16,25,37,0.98)_100%)] dark:text-[#f3f6fa] [backface-visibility:hidden] [transform:rotateY(180deg)]"
               >
-                    <div className="absolute inset-x-0 top-0 h-1.5" style={{ backgroundColor: experience.color }} aria-hidden="true" />
+                    <div className="absolute inset-x-0 top-0 h-1.5 bg-[#6f655b] dark:bg-[#73a7ff]" aria-hidden="true" />
                     <div data-card-back-content>
                       <div className="flex items-start justify-between gap-5 border-b border-current/15 pb-[clamp(1rem,2vh,1.5rem)]">
                         <div>
@@ -432,9 +431,9 @@ function DesktopExperienceCards({ experiences, title, label }: {experiences: Exp
                             {experience.company}
                           </h3>
                         </div>
-                        <span className="mt-1 size-4 shrink-0" style={{ backgroundColor: experience.color }} aria-hidden="true" />
+                        <span className="mt-1 size-4 shrink-0 bg-[#6f655b] dark:bg-[#73a7ff]" aria-hidden="true" />
                       </div>
-                      <p className="mt-[clamp(1rem,2vh,1.5rem)] font-mono text-[10px] uppercase leading-5 tracking-[0.13em] opacity-55 xl:text-xs">
+                      <p className="mt-[clamp(1rem,2vh,1.5rem)] font-mono text-[10px] uppercase leading-5 tracking-[0.13em] opacity-70 xl:text-xs">
                         {experience.role} · {experience.dateRange}
                       </p>
                       <ol className="mt-[clamp(1rem,2vh,1.75rem)] border-t border-current/15">
@@ -443,7 +442,7 @@ function DesktopExperienceCards({ experiences, title, label }: {experiences: Exp
                             <span aria-hidden="true" className="font-mono text-xs tracking-[0.18em] opacity-40">
                               {String(highlightIndex + 1).padStart(2, "0")}
                             </span>
-                            <p className="text-xs leading-5 opacity-75 xl:text-sm xl:leading-6">{highlight}</p>
+                            <p className="text-xs leading-5 opacity-85 xl:text-sm xl:leading-6">{highlight}</p>
                           </li>
                         ))}
                       </ol>
