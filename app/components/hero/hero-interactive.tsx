@@ -4,6 +4,7 @@ import * as React from "react";
 import { m, type Variants } from "framer-motion";
 import { useHydrationSafeReducedMotion } from "@/app/hooks/use-hydration-safe-reduced-motion";
 import { cn } from "@/lib/utils";
+import { SilkBackground } from "./silk-background";
 
 /** Local origin keeps compositing cheap; enter uses translate only (no scale). */
 export const HERO_MOTION_ORIGIN: React.CSSProperties = {
@@ -113,19 +114,13 @@ export function HeroBackdrop(): React.JSX.Element {
             aria-hidden
             style={HERO_MOTION_ORIGIN}
         >
-            <div className="hero-backdrop-grid absolute inset-0 opacity-[0.04] dark:opacity-[0.12]" />
+            <div className="hero-silk-transition absolute inset-0" />
             {!reduceMotion ? (
-                <>
-                    <div
-                        className="hero-backdrop-orb-a absolute -left-[18%] top-[12%] h-[min(42vw,420px)] w-[min(42vw,420px)] rounded-full bg-foreground/4.5 blur-2xl"
-                        aria-hidden
-                    />
-                    <div
-                        className="hero-backdrop-orb-b absolute -right-[12%] bottom-[18%] h-[min(36vw,360px)] w-[min(36vw,360px)] rounded-full bg-foreground/5.5 blur-2xl"
-                        aria-hidden
-                    />
-                </>
+                <div className="hero-silk-layer absolute inset-0">
+                    <SilkBackground />
+                </div>
             ) : null}
+            <div className="hero-backdrop-grid absolute inset-0 opacity-[0.04] dark:opacity-[0.12]" />
         </div>
     );
 }

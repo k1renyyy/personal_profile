@@ -286,9 +286,9 @@
 
 .contact-klein-glow {
   background-image: radial-gradient(
-    ellipse 76% 58% at 50% 106%,
-    rgb(174 188 224 / 60%) 0%,
-    rgb(216 211 232 / 40%) 46%,
+    ellipse 92% 120% at 50% 106%,
+    rgb(185 216 255 / 70%) 0%,
+    rgb(214 231 255 / 44%) 46%,
     transparent 78%
   );
   background-repeat: no-repeat;
@@ -305,9 +305,9 @@
 
 .dark .contact-klein-glow {
   background-image: radial-gradient(
-    ellipse 76% 58% at 50% 106%,
-    rgb(93 128 162 / 44%) 0%,
-    rgb(143 174 194 / 24%) 48%,
+    ellipse 92% 120% at 50% 106%,
+    rgb(23 59 105 / 56%) 0%,
+    rgb(17 40 66 / 32%) 48%,
     transparent 78%
   );
 }
@@ -324,9 +324,9 @@
 
   .contact-klein-glow {
     background-image: radial-gradient(
-      ellipse 112% 44% at 50% 104%,
-      rgb(174 188 224 / 54%) 0%,
-      rgb(216 211 232 / 34%) 48%,
+      ellipse 126% 90% at 50% 104%,
+      rgb(185 216 255 / 64%) 0%,
+      rgb(214 231 255 / 40%) 48%,
       transparent 80%
     );
   }
@@ -342,9 +342,9 @@
 
   .dark .contact-klein-glow {
     background-image: radial-gradient(
-      ellipse 112% 44% at 50% 104%,
-      rgb(93 128 162 / 40%) 0%,
-      rgb(143 174 194 / 22%) 50%,
+      ellipse 126% 90% at 50% 104%,
+      rgb(23 59 105 / 50%) 0%,
+      rgb(17 40 66 / 28%) 50%,
       transparent 80%
     );
   }
@@ -474,6 +474,36 @@ body.shoot-mode-active *::selection {
 .hero-backdrop-root {
   transform: translateZ(0);
   backface-visibility: hidden;
+}
+
+.hero-silk-transition {
+  background: linear-gradient(
+    to bottom,
+    #d6e7ff 0%,
+    #b9d8ff 36%,
+    #dce7ee 52%,
+    var(--background) 72%
+  );
+}
+
+.dark .hero-silk-transition {
+  background: linear-gradient(
+    to bottom,
+    #173b69 0%,
+    #112842 36%,
+    #0b1725 50%,
+    #06090e 62%,
+    var(--background) 74%
+  );
+}
+
+.hero-silk-layer {
+  opacity: 0.72;
+  mask-image: linear-gradient(to bottom, #000 0%, #000 44%, rgb(0 0 0 / 52%) 56%, transparent 68%);
+}
+
+.dark .hero-silk-layer {
+  opacity: 0.82;
 }
 
 /* Theme-aware grid for hero backdrop (replaces fixed black lines in dark mode). */
