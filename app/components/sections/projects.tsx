@@ -222,7 +222,7 @@ const ProjectsDesktopGallery = memo(function ProjectsDesktopGallery({
                                 onClick={() => selectProject(index)}
                                 className={`group flex min-h-16 items-center gap-4 px-4 py-3 text-left outline-none transition-[background-color,border-color] duration-200 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-foreground/60 dark:focus-visible:ring-[#e7dfd5] disabled:cursor-not-allowed disabled:opacity-60 motion-reduce:transition-none ${
                                     isActive
-                                        ? "border-l-2 border-[#6f655b] bg-[#fafbf9] dark:border-[#73a7ff] dark:bg-[#203b60]/70"
+                                        ? "border-l-2 border-[#6f655b] bg-[#fafbf9] dark:border-[#5d9fe8] dark:bg-[#0a4ba5]"
                                         : "border-l border-foreground/15 bg-transparent hover:bg-white/55 dark:hover:bg-[#203b60]/70"
                                 }`}
                             >
@@ -251,7 +251,7 @@ const ProjectsDesktopGallery = memo(function ProjectsDesktopGallery({
                     data-shoot-target="1"
                     data-shoot-disappear="1"
                     data-testid="featured-work-stage"
-                    className="w-full overflow-hidden border border-black/10 bg-[#fafbf9] p-8 text-[#171512] dark:border-[#7ea6d6]/25 dark:bg-[linear-gradient(180deg,rgba(32,59,96,0.92)_0%,rgba(21,36,58,0.96)_42%,rgba(16,25,37,0.98)_100%)] dark:text-[#f3f6fa] xl:p-10"
+                    className="w-full overflow-hidden border border-black/10 bg-[#fafbf9] p-8 text-[#171512] dark:border-[#5d9fe8]/35 dark:bg-[linear-gradient(180deg,#0a55c4_0%,#083c7c_42%,#091b32_100%)] dark:text-[#f3f6fa] xl:p-10"
                     style={{ height: "clamp(640px, 68vh, 760px)" }}
                 >
                     <div
@@ -316,7 +316,7 @@ export default function Projects({ content }: ProjectsProps) {
 
                     <div className="mt-12 flex flex-col gap-8 sm:mt-14">
                         {content.items.map((project, index) => (
-                            <article key={project.id} data-shoot-target="1" data-shoot-disappear="1" className="border border-border bg-[#fafbf9] p-6 text-[#171512] dark:border-[#7ea6d6]/25 dark:bg-[linear-gradient(180deg,rgba(32,59,96,0.92)_0%,rgba(21,36,58,0.96)_42%,rgba(16,25,37,0.98)_100%)] dark:text-[#f3f6fa] sm:p-8">
+                            <article key={project.id} data-shoot-target="1" data-shoot-disappear="1" className="border border-border bg-[#fafbf9] p-6 text-[#171512] dark:border-[#5d9fe8]/35 dark:bg-[linear-gradient(180deg,#0a55c4_0%,#083c7c_42%,#091b32_100%)] dark:text-[#f3f6fa] sm:p-8">
                                 <p className="font-mono text-[10px] tracking-[0.28em] opacity-55">{String(index + 1).padStart(2, "0")}</p>
                                 <h3 className="mt-3 text-3xl font-black uppercase leading-none tracking-tight">{project.title}</h3>
                                 <p className="mt-5 font-mono text-[10px] uppercase tracking-[0.16em] opacity-60">{project.type} · {project.role}</p>
