@@ -11,9 +11,10 @@ if (typeof window !== "undefined") {
 
 interface ScrollSectionProps {
     children: React.ReactNode;
+    translate?: boolean;
 }
 
-export default function ScrollSection({ children }: ScrollSectionProps) {
+export default function ScrollSection({ children, translate = true }: ScrollSectionProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const contentRef = useRef<HTMLDivElement>(null);
 
@@ -23,10 +24,10 @@ export default function ScrollSection({ children }: ScrollSectionProps) {
         // One-shot reveal (no scrub): two fewer ScrollTriggers per section vs enter+exit scrub.
         gsap.fromTo(
             contentRef.current,
-            { opacity: 0, y: 28 },
+            { opacity: 0, ...(translate ? { y: 28 } : {}) },
             {
                 opacity: 1,
-                y: 0,
+                ...(translate ? { y: 0 } : {}),
                 duration: 0.75,
                 ease: "power2.out",
                 scrollTrigger: {

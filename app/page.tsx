@@ -41,7 +41,7 @@ export default async function Home() {
 
       <SectionTransitionRail label="EXPERIENCE" meta="KIREN · 2026" />
       <Experience title={homepage.experienceTitle} label={homepage.experienceLabel} items={homepage.experiences} />
-      <ScrollSection>
+      <ScrollSection translate={false}>
         <Projects content={homepage.projects} />
       </ScrollSection>
       <SectionTransitionRail label="CAPABILITIES" meta="TOOLS · SYSTEMS" />

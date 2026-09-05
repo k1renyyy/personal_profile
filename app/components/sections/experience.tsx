@@ -22,6 +22,8 @@ type ExperienceItem = ExperienceContentItem & {
   logo?: { src: string };
 };
 
+const experienceLogo = (company: string) => company.includes("网易") ? "netease-games.webp" : company.includes("姚") ? "yao-foundation.png" : "bilibili.svg";
+
 function ExperienceLogo({ item }: { item: ExperienceItem }) {
   const [failed, setFailed] = React.useState(false);
 
@@ -122,15 +124,31 @@ function ExperienceCardArtwork({ item }: { item: ExperienceItem }) {
   const artwork = item.company.includes("网易") ? "velocity" : item.company.includes("姚") ? "bridge" : "frame";
 
   return (
+    <>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={`/experience/${artwork}.webp`}
+        alt=""
+        data-testid="experience-card-artwork"
+        data-artwork={artwork}
+        className="size-full object-contain"
+        aria-hidden="true"
+      />
+      <span className="absolute left-[7.5%] top-[4%] flex h-[8%] w-[36%] items-center bg-[#f4f0e7]" aria-hidden="true">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={`/experience/logos/${experienceLogo(item.company)}`} alt="" data-testid="experience-card-front-logo" className={`max-h-full max-w-full object-contain object-left brightness-0 ${item.company === "bilibili" ? "origin-left scale-[0.7]" : ""}`} />
+      </span>
+      <span data-testid="experience-card-front-company" className="absolute inset-x-[12%] bottom-[3.5%] flex h-[7%] items-center justify-center bg-[#f4f0e7] font-mono text-[clamp(0.7rem,1vw,0.95rem)] font-semibold tracking-[0.18em] text-[#171512]">
+        {item.company}
+      </span>
+    </>
+  );
+}
+
+function ExperienceCardLogo({ item }: { item: ExperienceItem }) {
+  return (
     // eslint-disable-next-line @next/next/no-img-element
-    <img
-      src={`/experience/${artwork}.webp`}
-      alt=""
-      data-testid="experience-card-artwork"
-      data-artwork={artwork}
-      className="size-full object-contain"
-      aria-hidden="true"
-    />
+    <img src={`/experience/logos/${experienceLogo(item.company)}`} alt="" data-testid="experience-card-back-logo" className={`h-9 w-[clamp(5rem,8vw,8rem)] object-contain object-right brightness-0 dark:invert ${item.company === "bilibili" ? "origin-right scale-[0.7]" : ""}`} aria-hidden="true" />
   );
 }
 
@@ -279,7 +297,7 @@ function DesktopExperienceCards({ experiences, title, label }: {experiences: Exp
             trigger: track,
             start: () => {
               const trigger = masterTimeline.scrollTrigger;
-              return trigger ? trigger.start + (trigger.end - trigger.start) * 0.94 : 0;
+              return trigger ? trigger.start + (trigger.end - trigger.start) * 0.88 : 0;
             },
             end: () => track.getBoundingClientRect().top + window.scrollY + track.offsetHeight - window.innerHeight,
             scrub: true,
@@ -287,8 +305,8 @@ function DesktopExperienceCards({ experiences, title, label }: {experiences: Exp
           },
         });
         exitTimeline
-          .fromTo(header, { y: 0 }, { y: "-12rem", ease: "none" }, 0)
-          .fromTo(stack, { y: 0 }, { y: "-18rem", ease: "none" }, 0);
+          .fromTo(header, { y: 0 }, { y: "-18rem", ease: "none" }, 0)
+          .fromTo(stack, { y: 0 }, { y: "-27rem", ease: "none" }, 0);
 
         const visibilityTrigger = ScrollTrigger.create({
           trigger: track,
@@ -394,14 +412,16 @@ function DesktopExperienceCards({ experiences, title, label }: {experiences: Exp
               >
                     <div className="absolute inset-x-0 top-0 h-1.5 bg-[#6f655b] dark:bg-[#5d9fe8]" aria-hidden="true" />
                     <div data-card-back-content>
-                      <div className="flex items-start justify-between gap-5 border-b border-current/15 pb-[clamp(1rem,2vh,1.5rem)]">
+                      <div className="border-b border-current/15 pb-[clamp(1rem,2vh,1.5rem)]">
                         <div>
                           <span className="font-mono text-xs tracking-[0.24em] opacity-45">{String(index + 1).padStart(2, "0")}</span>
-                          <h3 id={`experience-card-title-${index}`} className="mt-3 text-[clamp(1.75rem,2.5vw,3rem)] font-black leading-none tracking-tight">
-                            {experience.company}
-                          </h3>
+                          <div className="mt-3 flex items-center justify-between gap-5">
+                            <h3 id={`experience-card-title-${index}`} className="text-[clamp(1.75rem,2.5vw,3rem)] font-black leading-none tracking-tight">
+                              {experience.company}
+                            </h3>
+                            <ExperienceCardLogo item={experience} />
+                          </div>
                         </div>
-                        <span className="mt-1 size-4 shrink-0 bg-[#6f655b] dark:bg-[#5d9fe8]" aria-hidden="true" />
                       </div>
                       <p className="mt-[clamp(1rem,2vh,1.5rem)] font-mono text-[10px] uppercase leading-5 tracking-[0.13em] opacity-70 xl:text-xs">
                         {experience.role} · {experience.dateRange}

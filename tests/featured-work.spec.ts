@@ -17,15 +17,17 @@ async function openFeaturedWork(page: Page, viewport = desktopViewport) {
   await page.goto("/", { waitUntil: "networkidle" });
 
   const section = page.locator("#projects");
-  await section.scrollIntoViewIfNeeded();
+  await section.evaluate((element) => {
+    const top = element.getBoundingClientRect().top + window.scrollY;
+    const lenis = (window as Window & { lenis?: { scrollTo: (position: number, options: { immediate: boolean }) => void } }).lenis;
+    lenis?.scrollTo(top, { immediate: true });
+    window.scrollTo(0, top);
+  });
   await expect(section).toBeVisible();
+  await expect.poll(() => page.getByTestId("experience-stage").evaluate((element) => element.getBoundingClientRect().top)).toBeLessThan(-10);
 
   const desktop = section.getByTestId("featured-work-desktop");
   await expect(desktop).toBeVisible();
-  await expect.poll(() => section.evaluate((element) => {
-    const revealOwner = element.parentElement;
-    return revealOwner ? Number.parseFloat(getComputedStyle(revealOwner).opacity) : 0;
-  })).toBe(1);
   return { section, desktop };
 }
 

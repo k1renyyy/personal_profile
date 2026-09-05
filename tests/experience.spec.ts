@@ -50,6 +50,18 @@ function firstCardKeyframeProgress(localProgress: number) {
 test.describe("Experience desktop three-column flip", () => {
   test.skip(({ browserName }) => browserName !== "chromium", "Geometry assertions use Chromium rendering.");
 
+  test("keeps Projects free of a second reveal transform at the handoff", async ({ page }) => {
+    await page.setViewportSize(desktopViewport);
+    await page.goto("/", { waitUntil: "networkidle" });
+    const track = page.getByTestId("experience-track");
+    await scrollExperienceTo(page, track, 0.94);
+    const parentTransform = await page.locator("#projects").evaluate((element) => {
+      const parent = element.parentElement;
+      return parent ? getComputedStyle(parent).transform : null;
+    });
+    expect(parentTransform).toBe("none");
+  });
+
   test("reveals the heading and three matched illustrated cards during the entrance", async ({ page }) => {
     const { track, stage } = await openDesktopExperience(page);
     await expect(track.getByTestId("experience-card-front-overlay")).toHaveCount(3);
@@ -61,12 +73,18 @@ test.describe("Experience desktop three-column flip", () => {
     await expect(stage.getByText("工作经历", { exact: true })).toBeVisible();
     await expect(track.getByTestId("experience-card")).toHaveCount(3);
     await expect(track.getByTestId("experience-card-artwork")).toHaveCount(3);
+    await expect(track.getByTestId("experience-card-front-logo")).toHaveCount(3);
+    await expect(track.getByTestId("experience-card-back-logo")).toHaveCount(3);
     const revealed = await track.getByTestId("experience-card-front-overlay").evaluateAll((overlays) => overlays.map((overlay) => Number(getComputedStyle(overlay).opacity)));
     expect(revealed.every((opacity) => opacity < 0.05)).toBe(true);
     const cards = track.getByTestId("experience-card");
     await expect(cards.filter({ hasText: "网易互娱" }).getByTestId("experience-card-artwork")).toHaveAttribute("data-artwork", "velocity");
     await expect(cards.filter({ hasText: "bilibili" }).getByTestId("experience-card-artwork")).toHaveAttribute("data-artwork", "frame");
     await expect(cards.filter({ hasText: "姚基金" }).getByTestId("experience-card-artwork")).toHaveAttribute("data-artwork", "bridge");
+    await expect(track.getByTestId("experience-card-front-company")).toHaveText(["网易互娱", "bilibili", "姚基金"]);
+    await expect(cards.filter({ hasText: "网易互娱" }).getByTestId("experience-card-back-logo")).toHaveAttribute("src", "/experience/logos/netease-games.webp");
+    await expect(cards.filter({ hasText: "bilibili" }).getByTestId("experience-card-back-logo")).toHaveAttribute("src", "/experience/logos/bilibili.svg");
+    await expect(cards.filter({ hasText: "姚基金" }).getByTestId("experience-card-back-logo")).toHaveAttribute("src", "/experience/logos/yao-foundation.png");
   });
 
   test("uses a 390vh scrubbed track with no scroll lock", async ({ page }) => {
@@ -206,7 +224,26 @@ test.describe("Experience desktop three-column flip", () => {
     expect(before).not.toBeNull();
     expect(after).not.toBeNull();
     expect(Math.abs(before!.y + before!.height / 2 - desktopViewport.height / 2)).toBeLessThan(desktopViewport.height * 0.1);
-    expect(after!.y).toBeLessThan(before!.y - 1);
+    expect(after!.y).toBeLessThan(before!.y - desktopViewport.height * 0.3);
+  });
+
+  test("keeps the Experience to Projects handoff moving in one direction", async ({ page }) => {
+    const { track, stage } = await openDesktopExperience(page);
+    const projects = page.locator("#projects");
+    const positions = [];
+
+    for (const progress of [0.9, 0.93, 0.96]) {
+      await scrollExperienceTo(page, track, progress);
+      positions.push({
+        stage: await stage.evaluate((element) => element.getBoundingClientRect().top),
+        projects: await projects.evaluate((element) => element.getBoundingClientRect().top),
+      });
+    }
+
+    expect(positions[1].projects).toBeLessThan(positions[0].projects);
+    expect(positions[2].projects).toBeLessThan(positions[1].projects);
+    expect(positions[1].stage).toBeLessThanOrEqual(positions[0].stage);
+    expect(positions[2].stage).toBeLessThan(positions[1].stage);
   });
 
   test("shows a slim native scrollbar on desktop", async ({ page }) => {
