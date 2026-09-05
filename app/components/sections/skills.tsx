@@ -7,7 +7,7 @@ import {
   useTransform,
   useAnimationFrame
 } from "framer-motion";
-import '@/components/ScrollVelocity.css';
+import "./skills.css";
 import { useHydrationSafeReducedMotion } from "@/app/hooks/use-hydration-safe-reduced-motion";
 
 function useElementWidth<T extends HTMLElement>(ref: React.RefObject<T | null>): number {
