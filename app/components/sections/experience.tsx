@@ -151,7 +151,7 @@ function DesktopExperienceCards({ experiences, title, label }: {experiences: Exp
     if (cards.length !== experiences.length) return;
 
     const setPhase = (progress: number) => {
-      const phase = progress < 0.55 ? "front" : progress < 0.828 ? "transitioning" : "back";
+      const phase = progress < 0.75 ? "front" : progress < 0.88 ? "transitioning" : "back";
       track.dataset.phase = phase;
       cards.forEach((card) => {
         card.dataset.cardState = phase;
@@ -244,10 +244,16 @@ function DesktopExperienceCards({ experiences, title, label }: {experiences: Exp
                 "75%": {
                   x: 0,
                   rotationZ: 0,
+                  rotationY: 0,
+                  scale: 1,
+                },
+                "85%": {
+                  x: 0,
+                  rotationZ: 0,
                   rotationY: -190,
                   scale: 1,
                 },
-                "82%": { rotationY: -180 },
+                "92%": { rotationY: -180 },
                 "100%": { rotationZ: 0 },
               },
             }, 0.012 * staggerIndex);
@@ -273,7 +279,7 @@ function DesktopExperienceCards({ experiences, title, label }: {experiences: Exp
             trigger: track,
             start: () => {
               const trigger = masterTimeline.scrollTrigger;
-              return trigger ? trigger.start + (trigger.end - trigger.start) * 0.82 : 0;
+              return trigger ? trigger.start + (trigger.end - trigger.start) * 0.94 : 0;
             },
             end: () => track.getBoundingClientRect().top + window.scrollY + track.offsetHeight - window.innerHeight,
             scrub: true,
@@ -361,7 +367,7 @@ function DesktopExperienceCards({ experiences, title, label }: {experiences: Exp
   }, [experiences.length]);
 
   return (
-    <div ref={trackRef} data-testid="experience-track" data-phase="front" className="relative hidden h-[350vh] lg:block">
+    <div ref={trackRef} data-testid="experience-track" data-phase="front" className="relative hidden h-[390vh] lg:block">
       <div ref={stageRef} data-testid="experience-stage" className="sticky top-0 h-screen overflow-hidden [perspective:1600px]">
         <header ref={headerRef} className="absolute inset-x-0 top-0 z-20 mx-auto w-full max-w-[1920px] px-20 pt-8 xl:px-32 2xl:px-44 2xl:pt-10">
           <div className="flex items-end gap-4 border-b border-border pb-4">

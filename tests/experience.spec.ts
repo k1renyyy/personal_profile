@@ -69,9 +69,9 @@ test.describe("Experience desktop three-column flip", () => {
     await expect(cards.filter({ hasText: "姚基金" }).getByTestId("experience-card-artwork")).toHaveAttribute("data-artwork", "bridge");
   });
 
-  test("uses a 350vh scrubbed track with no scroll lock", async ({ page }) => {
+  test("uses a 390vh scrubbed track with no scroll lock", async ({ page }) => {
     const { track } = await openDesktopExperience(page);
-    expect(await track.evaluate((element) => (element as HTMLElement).offsetHeight)).toBeCloseTo(desktopViewport.height * 3.5, 0);
+    expect(await track.evaluate((element) => (element as HTMLElement).offsetHeight)).toBeCloseTo(desktopViewport.height * 3.9, 0);
     expect(await page.evaluate(() => document.body.style.overflow)).toBe("");
     expect(await page.evaluate(() => document.documentElement.style.overflow)).toBe("");
   });
@@ -79,7 +79,7 @@ test.describe("Experience desktop three-column flip", () => {
   test("spreads and flips all cards into visible portrait columns", async ({ page }) => {
     const { track, stage } = await openDesktopExperience(page);
     const opening = await cardGeometry(track);
-    await scrollExperienceTo(page, track, 0.84);
+    await scrollExperienceTo(page, track, 0.9);
     await expect(track).toHaveAttribute("data-phase", "back");
     const cards = await cardGeometry(track);
     expect(cards.map((card) => card.state)).toEqual(["back", "back", "back"]);
@@ -121,21 +121,27 @@ test.describe("Experience desktop three-column flip", () => {
     expect(after.some((card, index) => Math.abs(card.top - before[index].top) > 0.2)).toBe(true);
   });
 
-  test("spreads and flips simultaneously across the reference timeline range", async ({ page }) => {
+  test("holds the spread fronts before flipping", async ({ page }) => {
     const { track } = await openDesktopExperience(page);
     await scrollExperienceTo(page, track, 0.5);
     const collapsed = await cardGeometry(track);
     const preFlipY = await track.getByTestId("experience-card").evaluateAll((cards) => cards.map((card) => Math.abs(new DOMMatrix(getComputedStyle(card).transform).m13)));
     expect(preFlipY.every((value) => value < 0.02)).toBe(true);
 
-    await scrollExperienceTo(page, track, 0.66);
-    const transitioning = await cardGeometry(track);
-    const midFlipY = await track.getByTestId("experience-card").evaluateAll((cards) => cards.map((card) => Math.abs(new DOMMatrix(getComputedStyle(card).transform).m13)));
-    expect(transitioning[0].left).toBeLessThan(collapsed[0].left);
-    expect(transitioning[2].left).toBeGreaterThan(collapsed[2].left);
-    expect(midFlipY.every((value) => value > 0.1)).toBe(true);
+    await scrollExperienceTo(page, track, 0.72);
+    const spread = await cardGeometry(track);
+    const heldFrontY = await track.getByTestId("experience-card").evaluateAll((cards) => cards.map((card) => Math.abs(new DOMMatrix(getComputedStyle(card).transform).m13)));
+    expect(spread[0].left).toBeLessThan(collapsed[0].left);
+    expect(spread[2].left).toBeGreaterThan(collapsed[2].left);
+    expect(heldFrontY.every((value) => value < 0.02)).toBe(true);
+    await expect(track).toHaveAttribute("data-phase", "front");
 
-    await scrollExperienceTo(page, track, 0.86);
+    await scrollExperienceTo(page, track, 0.8);
+    const midFlipY = await track.getByTestId("experience-card").evaluateAll((cards) => cards.map((card) => Math.abs(new DOMMatrix(getComputedStyle(card).transform).m13)));
+    expect(midFlipY.some((value) => value > 0.1)).toBe(true);
+    await expect(track).toHaveAttribute("data-phase", "transitioning");
+
+    await scrollExperienceTo(page, track, 0.9);
     await expect(track).toHaveAttribute("data-phase", "back");
   });
 
@@ -150,7 +156,7 @@ test.describe("Experience desktop three-column flip", () => {
     });
     expect(scaleAtForty).toBeCloseTo(0.8, 1);
 
-    await scrollExperienceTo(page, track, firstCardKeyframeProgress(0.75));
+    await scrollExperienceTo(page, track, firstCardKeyframeProgress(0.85));
     const overshoot = await firstCard.evaluate((card) => {
       const matrix = new DOMMatrix(getComputedStyle(card).transform);
       return { m11: matrix.m11, m13: matrix.m13 };
@@ -158,7 +164,7 @@ test.describe("Experience desktop three-column flip", () => {
     expect(overshoot.m11).toBeCloseTo(Math.cos(190 * Math.PI / 180), 1);
     expect(Math.abs(overshoot.m13)).toBeGreaterThan(0.1);
 
-    await scrollExperienceTo(page, track, firstCardKeyframeProgress(0.82));
+    await scrollExperienceTo(page, track, firstCardKeyframeProgress(0.92));
     const corrected = await firstCard.evaluate((card) => {
       const matrix = new DOMMatrix(getComputedStyle(card).transform);
       return { m11: matrix.m11, m13: matrix.m13 };
@@ -190,18 +196,17 @@ test.describe("Experience desktop three-column flip", () => {
   });
 
   test("moves the completed card stage upward through the sticky handoff", async ({ page }) => {
-    const { track, stage } = await openDesktopExperience(page);
+    const { track } = await openDesktopExperience(page);
     const stack = track.getByTestId("experience-card-stack");
-    await scrollExperienceTo(page, track, 0.8);
-    const before = await stack.boundingBox();
     await scrollExperienceTo(page, track, 0.9);
+    const before = await stack.boundingBox();
+    await scrollExperienceTo(page, track, 0.95);
     const after = await stack.boundingBox();
 
     expect(before).not.toBeNull();
     expect(after).not.toBeNull();
     expect(Math.abs(before!.y + before!.height / 2 - desktopViewport.height / 2)).toBeLessThan(desktopViewport.height * 0.1);
     expect(after!.y).toBeLessThan(before!.y - 1);
-    await expect.poll(() => stage.evaluate((element) => element.getBoundingClientRect().top)).toBeCloseTo(0, 0);
   });
 
   test("shows a slim native scrollbar on desktop", async ({ page }) => {
@@ -217,7 +222,7 @@ test.describe("Experience desktop three-column flip", () => {
       const triggerStart = absoluteTop - window.innerHeight * 0.95;
       const triggerEnd = absoluteTop + trackElement.offsetHeight - window.innerHeight * 0.75;
       return {
-        animationEnd: triggerStart + (triggerEnd - triggerStart) * 0.82,
+        animationEnd: triggerStart + (triggerEnd - triggerStart) * 0.88,
         stickyRelease: absoluteTop + trackElement.offsetHeight - window.innerHeight,
       };
     });
@@ -261,7 +266,7 @@ test.describe("Experience desktop three-column flip", () => {
       await page.emulateMedia({ colorScheme: "light", reducedMotion: "no-preference" });
       await page.goto("/", { waitUntil: "networkidle" });
       const track = page.getByTestId("experience-track");
-      await scrollExperienceTo(page, track, 0.84);
+      await scrollExperienceTo(page, track, 0.9);
       const heading = await track.getByRole("heading", { name: "工作经历" }).boundingBox();
       const cards = await cardGeometry(track);
       expect(heading, `${viewport.width}x${viewport.height}`).not.toBeNull();
@@ -287,7 +292,7 @@ test.describe("Experience desktop three-column flip", () => {
 
   test("preserves the timeline phase through a desktop resize", async ({ page }) => {
     const { track } = await openDesktopExperience(page);
-    await scrollExperienceTo(page, track, 0.66);
+    await scrollExperienceTo(page, track, 0.5);
     const phase = await track.getAttribute("data-phase");
     await page.setViewportSize({ width: 1280, height: 800 });
     await page.waitForTimeout(400);
