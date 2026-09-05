@@ -18,6 +18,13 @@ type TestimonialsProps = {
     };
 };
 
+const testimonialAvatars: Record<string, string> = {
+    "栾兴良": "https://api.dicebear.com/9.x/personas/svg?seed=luan-xingliang&hair=shortCombover&eyes=glasses&nose=mediumRound&mouth=smile&skinColor=e5a07e&hairColor=362c47&clothingColor=456dff&facialHairProbability=0",
+    "陈志鹏": "https://api.dicebear.com/9.x/personas/svg?seed=chen-zhipeng&hair=fade&eyes=happy&nose=smallRound&mouth=bigSmile&skinColor=b16a5b&hairColor=362c47&clothingColor=6dbb58&facialHairProbability=0",
+    "叶大伟": "https://api.dicebear.com/9.x/personas/svg?seed=ye-dawei&hair=shortCombover&eyes=glasses&nose=wrinkles&mouth=smile&skinColor=e5a07e&hairColor=362c47&clothingColor=54d7c7&facialHairProbability=0",
+    "Gina Antoniello": "https://api.dicebear.com/9.x/personas/svg?seed=gina-antoniello&hair=extraLong&eyes=open&nose=smallRound&mouth=lips&skinColor=e7a391&hairColor=6c4545&clothingColor=f3b63a&facialHairProbability=0",
+};
+
 export default function Testimonials({ content }: TestimonialsProps) {
     const sliderRef = useRef<HTMLDivElement>(null);
     
@@ -98,8 +105,14 @@ export default function Testimonials({ content }: TestimonialsProps) {
                                 </div>
 
                                 <div className="flex items-center gap-4 mt-auto">
-                                    <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-lg border border-border">
-                                        {testimonial.initials}
+                                    <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-lg border border-border overflow-hidden">
+                                        {testimonialAvatars[testimonial.name] ? (
+                                            <span
+                                                aria-hidden="true"
+                                                className="w-full h-full bg-cover bg-center"
+                                                style={{backgroundImage: `url(${testimonialAvatars[testimonial.name]})`}}
+                                            />
+                                        ) : testimonial.initials}
                                     </div>
                                     <div>
                                         <h4 className="font-bold text-foreground uppercase tracking-wider text-xs">{testimonial.name}</h4>
