@@ -23,6 +23,8 @@ const photoPlaceholders = [
     { label: "Photo 03", className: "bg-linear-to-br from-cyan-300/65 via-sky-200/30 to-background" },
 ];
 
+const paragraphLabels = ["CROSSOVER", "CURIOSITY", "CONTINUITY"];
+
 export default function Stats({ title, paragraphs, photos }: StatsProps) {
     const sectionRef = useRef<HTMLElement>(null);
 
@@ -144,11 +146,21 @@ export default function Stats({ title, paragraphs, photos }: StatsProps) {
                         <h2 className="stats-anim wrap-anywhere text-[clamp(1.625rem,calc(0.9rem+4.2vw),5rem)] font-black uppercase leading-[0.95] tracking-tight text-foreground">
                             {title}
                         </h2>
-                        {paragraphs.map((paragraph, index) => (
-                            <p key={paragraph} className={`stats-anim max-w-full leading-relaxed wrap-anywhere sm:max-w-lg ${index === 0 ? "text-[0.9375rem] text-foreground/70 sm:text-base md:text-lg" : "text-[0.8125rem] text-foreground/55 sm:text-sm md:text-base"}`}>
-                                {paragraph}
-                            </p>
-                        ))}
+                        <div className="space-y-1 sm:max-w-xl">
+                            {paragraphs.map((paragraph, index) => (
+                                <p
+                                    key={paragraph}
+                                    className="stats-anim group relative max-w-full wrap-anywhere border-l border-foreground/10 py-2 pl-4 leading-relaxed text-foreground/50 transition-[color,transform,border-color] duration-300 ease-out hover:translate-x-2 hover:border-[#858bd0] hover:text-foreground sm:py-3 sm:pl-5"
+                                >
+                                    <span className="mb-1 block font-mono text-[0.625rem] uppercase tracking-[0.28em] text-[#858bd0]/65 transition-colors duration-300 group-hover:text-[#858bd0]">
+                                        {String(index + 1).padStart(2, "0")} / {paragraphLabels[index]}
+                                    </span>
+                                    <span className={index === 0 ? "text-[0.9375rem] sm:text-base md:text-lg" : "text-[0.8125rem] sm:text-sm md:text-base"}>
+                                        {paragraph}
+                                    </span>
+                                </p>
+                            ))}
+                        </div>
                     </div>
 
                     {/* Right — Photo cluster */}
