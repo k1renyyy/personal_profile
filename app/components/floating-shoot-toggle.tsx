@@ -19,6 +19,7 @@ import {
 const SPLAT_FADE_MS = 520;
 const SPLAT_TOTAL_LIFETIME_MS = 3200;
 const SPLAT_VISIBLE_MS = SPLAT_TOTAL_LIFETIME_MS - SPLAT_FADE_MS;
+const SHOOT_HINT_STORAGE_KEY = "shoot-hint-seen";
 
 function GunLoadingFallback(): React.JSX.Element {
     return (
@@ -68,8 +69,17 @@ function writeStateToStorage(isOn: boolean): void {
     }
 }
 
+function markShootHintSeen(): void {
+    try {
+        window.localStorage.setItem(SHOOT_HINT_STORAGE_KEY, "true");
+    } catch {
+        // Keep the hint dismissed for this session when storage is unavailable.
+    }
+}
+
 export default function FloatingShootToggle(): React.JSX.Element {
     const [isOn, setIsOn] = React.useState<boolean>(false);
+    const [showShootHint, setShowShootHint] = React.useState<boolean>(false);
     const [showGunCursor, setShowGunCursor] = React.useState<boolean>(false);
     const [dateTimeText, setDateTimeText] = React.useState<string>("");
     const [aimX, setAimX] = React.useState<number>(0);
@@ -89,6 +99,11 @@ export default function FloatingShootToggle(): React.JSX.Element {
 
     React.useEffect(() => {
         setIsOn(readInitialState());
+        try {
+            setShowShootHint(window.localStorage.getItem(SHOOT_HINT_STORAGE_KEY) !== "true");
+        } catch {
+            setShowShootHint(true);
+        }
     }, []);
 
     React.useEffect(() => {
@@ -131,10 +146,17 @@ export default function FloatingShootToggle(): React.JSX.Element {
             const next = !prev;
             writeStateToStorage(next);
             if (next) {
+                setShowShootHint(false);
+                markShootHintSeen();
                 void ensurePaintballAudioRunning();
             }
             return next;
         });
+    }, []);
+
+    const dismissShootHint = React.useCallback(() => {
+        setShowShootHint(false);
+        markShootHintSeen();
     }, []);
 
     // Fade all splats out when leaving shoot mode, then clear.
@@ -517,7 +539,7 @@ export default function FloatingShootToggle(): React.JSX.Element {
                 <div className="flex items-center justify-between">
                     {/* Left: toggle */}
                     <div
-                        className="pointer-events-auto cursor-pointer"
+                        className="relative flex items-center gap-3 pointer-events-auto cursor-pointer"
                         data-shoot-controls="1"
                         onMouseEnter={() => setHoverShootControls(true)}
                         onMouseLeave={() => setHoverShootControls(false)}
@@ -556,9 +578,25 @@ export default function FloatingShootToggle(): React.JSX.Element {
                             </span>
 
                             <span className="text-[10px] font-mono uppercase tracking-[0.28em] text-foreground/80 select-none">
-                                Shoot
+                                Shoot Mode
                             </span>
                         </button>
+
+                        {showShootHint && (
+                            <div className="absolute bottom-full left-0 mb-3 flex items-center gap-3 whitespace-nowrap rounded-full border border-border bg-card px-4 py-2 shadow-[0_18px_50px_-24px_rgba(0,0,0,0.6)] lg:static lg:mb-0">
+                                <span className="text-[10px] font-mono uppercase tracking-[0.18em] text-foreground/80 select-none">
+                                    Try it — click Shoot Mode to start
+                                </span>
+                                <button
+                                    type="button"
+                                    onClick={dismissShootHint}
+                                    className="cursor-pointer text-sm leading-none text-foreground/50 transition-colors hover:text-foreground"
+                                    aria-label="Dismiss Shoot Mode tip"
+                                >
+                                    ×
+                                </button>
+                            </div>
+                        )}
                     </div>
 
                     <div />

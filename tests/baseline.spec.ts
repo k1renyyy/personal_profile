@@ -101,6 +101,25 @@ test("theme remains dark regardless of a stale light preference", async ({ page,
   await expect(page.getByRole("button", { name: /theme/i })).toHaveCount(0);
 });
 
+test("Shoot Mode discovery hint retires after dismissal or use", async ({ page, browserName }) => {
+  test.skip(browserName !== "chromium", "Discovery persistence is verified once in pinned Chromium.");
+  await page.goto("/", { waitUntil: "load" });
+
+  const hint = page.getByText("Try it — click Shoot Mode to start");
+  await expect(hint).toBeVisible();
+  await expect(page.getByText("Shoot Mode", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Dismiss Shoot Mode tip" }).click();
+  await page.reload();
+  await expect(hint).toHaveCount(0);
+
+  await page.evaluate(() => localStorage.removeItem("shoot-hint-seen"));
+  await page.reload();
+  await page.getByRole("button", { name: "Toggle shoot mode" }).click({ force: true });
+  await expect(hint).toHaveCount(0);
+  await page.reload();
+  await expect(hint).toHaveCount(0);
+});
+
 test("reduced motion, Shoot Mode, WebGL and testimonials remain operational", async ({ page, browserName }) => {
   test.skip(browserName !== "chromium", "Interaction timing is verified in pinned Chromium.");
   const evidence = collectBrowserFailures(page);

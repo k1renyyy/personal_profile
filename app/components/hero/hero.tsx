@@ -219,12 +219,12 @@ export default function Hero({identity}: {identity: HeroIdentity}) {
                                         <HeroPortrait copy={copy} width={1600} height={600} sizes="(max-width: 768px) 100vw, 640px" />
                                     </HeroInteractivePortrait>
 
-                                    <div className="mt-6 grid grid-cols-12 items-start gap-4">
-                                        <div className="col-span-2 text-foreground/70 text-lg leading-none select-none">
+                                    <div className="mt-6 flex items-start gap-3">
+                                        <div className="shrink-0 text-foreground/70 text-lg leading-none select-none">
                                             <span aria-hidden="true">-&gt;</span>
                                         </div>
-                                        <div className="col-span-10">
-                                            <div className="text-[14px] font-mono uppercase tracking-[0.28em] text-foreground/70">
+                                        <div className="min-w-0">
+                                            <div className="text-[14px] font-mono uppercase tracking-[0.28em] text-foreground/70 xl:whitespace-nowrap">
                                                 {copy.regionLabel}
                                             </div>
                                         </div>
